@@ -1,15 +1,4 @@
-"use client"
-
-import { Checkbox } from "@/components/ui/checkbox"
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
+import { SpotsTable } from "./spots-table"
 
 export default function SpotsPage() {
   return (
@@ -18,24 +7,7 @@ export default function SpotsPage() {
         <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
           Spots 📍
         </h1>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[50px]" />
-              <TableHead>Spots</TableHead>
-              <TableHead>Selected Tricks</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell>
-                <Checkbox />
-              </TableCell>
-              <TableCell>アートギャラリー</TableCell>
-              <TableCell>HeelFlip</TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
+        <SpotsTable />
       </div>
     </section>
   )
