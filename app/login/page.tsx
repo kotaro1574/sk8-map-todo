@@ -1,5 +1,7 @@
 import { siteConfig } from "@/config/site"
 
+import LoginForm from "./login-form"
+
 export default function IndexPage() {
   return (
     <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
@@ -7,8 +9,12 @@ export default function IndexPage() {
         <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
           {siteConfig.name}
         </h1>
-
-        <div className="w-full"></div>
+        <p className="max-w-[700px] text-lg text-muted-foreground">
+          {siteConfig.description}
+        </p>
+        <div className="w-full">
+          <LoginForm />
+        </div>
       </div>
     </section>
   )
