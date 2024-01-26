@@ -1,4 +1,11 @@
+import dynamic from "next/dynamic"
+
 import { siteConfig } from "@/config/site"
+
+const DynamicMap = dynamic(() => import("@/components/map"), {
+  loading: () => <p>A map is loading</p>,
+  ssr: false,
+})
 
 export default function IndexPage() {
   return (
@@ -8,7 +15,9 @@ export default function IndexPage() {
           {siteConfig.name}
         </h1>
 
-        <div className="w-full"></div>
+        <div className="w-full">
+          <DynamicMap />
+        </div>
       </div>
     </section>
   )
