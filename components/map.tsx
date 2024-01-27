@@ -1,12 +1,18 @@
 "use client"
 
-import L from "leaflet"
+import L, { LatLng } from "leaflet"
 
 import MarkerIcon from "../node_modules/leaflet/dist/images/marker-icon.png"
 import MarkerShadow from "../node_modules/leaflet/dist/images/marker-shadow.png"
 import "leaflet/dist/leaflet.css"
 import { useState } from "react"
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet"
+import {
+  MapContainer,
+  Marker,
+  Popup,
+  TileLayer,
+  useMapEvents,
+} from "react-leaflet"
 
 import { Button } from "./ui/button"
 
@@ -23,6 +29,40 @@ export default function Map() {
     }
   }
 
+  function LocationMarker() {
+    const [position, setPosition] = useState<LatLng | null>(null)
+
+    const map = useMapEvents({
+      click(e) {
+        console.log(e)
+        setPosition(e.latlng)
+      },
+    })
+
+    return (
+      <>
+        {position && (
+          <Marker
+            position={position}
+            icon={
+              new L.Icon({
+                iconUrl: MarkerIcon.src,
+                iconRetinaUrl: MarkerIcon.src,
+                iconSize: [25, 41],
+                iconAnchor: [12.5, 41],
+                popupAnchor: [0, -41],
+                shadowUrl: MarkerShadow.src,
+                shadowSize: [41, 41],
+              })
+            }
+          >
+            <Popup>You are here</Popup>
+          </Marker>
+        )}
+      </>
+    )
+  }
+
   return (
     <div>
       <div className="overflow-hidden rounded-sm">
@@ -34,7 +74,6 @@ export default function Map() {
           center={coord}
           key={`${coord}`}
           zoom={13}
-          scrollWheelZoom={false}
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -59,6 +98,7 @@ export default function Map() {
               A pretty CSS3 popup. <br /> Easily customizable.
             </Popup>
           </Marker>
+          <LocationMarker />
         </MapContainer>
       </div>
       <div className="mt-4 text-center">
