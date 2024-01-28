@@ -43,8 +43,6 @@ export default function CreateSpotForm() {
     },
   })
 
-  console.log(form.watch())
-
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setLoading(true)
