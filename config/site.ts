@@ -15,4 +15,5 @@ export const siteConfig = {
     github: "https://github.com/shadcn/ui",
     docs: "https://ui.shadcn.com",
   },
+  defaultMapCenter: { lat: 49.27705877501251, lng: -123.10890913009645 },
 }

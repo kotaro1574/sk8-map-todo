@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { z } from "zod"
 
 import { Button } from "@/components/ui/button"
@@ -16,11 +16,18 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import LocationSelectMap from "@/components/location-select-map"
 
 const formSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
   tricks: z.array(z.string()),
   description: z.string(),
+  latlng: z
+    .object({
+      lat: z.number(),
+      lng: z.number(),
+    })
+    .nullable(),
 })
 
 export default function CreateSpotForm() {
@@ -32,8 +39,11 @@ export default function CreateSpotForm() {
       title: "",
       tricks: [],
       description: "",
+      latlng: null,
     },
   })
+
+  console.log(form.watch())
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -86,6 +96,17 @@ export default function CreateSpotForm() {
               <FormControl>
                 <Textarea {...field} />
               </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <Controller
+          control={form.control}
+          name="latlng"
+          render={({ field: { onChange, value } }) => (
+            <FormItem>
+              <FormLabel>address</FormLabel>
+              <LocationSelectMap onChange={onChange} value={value} />
             </FormItem>
           )}
         />
