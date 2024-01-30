@@ -20,7 +20,7 @@ import LocationSelectMap from "@/components/location-select-map"
 
 const formSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
-  tricks: z.array(z.string()),
+  tricks: z.string(),
   description: z.string(),
   latlng: z
     .object({
@@ -37,7 +37,7 @@ export default function CreateSpotForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
-      tricks: [],
+      tricks: "",
       description: "",
       latlng: null,
     },
@@ -46,6 +46,7 @@ export default function CreateSpotForm() {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setLoading(true)
+      console.log(values)
     } catch (error) {
       console.error(error)
     } finally {
