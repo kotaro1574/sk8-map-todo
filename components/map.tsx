@@ -2,6 +2,8 @@
 
 import L from "leaflet"
 
+import { siteConfig } from "@/config/site"
+
 import "leaflet/dist/leaflet.css"
 import { useState } from "react"
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet"
@@ -11,7 +13,9 @@ import MarkerShadow from "../node_modules/leaflet/dist/images/marker-shadow.png"
 import { Button } from "./ui/button"
 
 export default function Map() {
-  const [coord, setCoord] = useState<L.LatLngExpression>([51.505, -0.09])
+  const [coord, setCoord] = useState<L.LatLngExpression>(
+    siteConfig.defaultMapCenter
+  )
   const [loading, setLoading] = useState(false)
 
   const getMyLocation = () => {
@@ -43,24 +47,27 @@ export default function Map() {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
 
-          <Marker
-            icon={
-              new L.Icon({
-                iconUrl: MarkerIcon.src,
-                iconRetinaUrl: MarkerIcon.src,
-                iconSize: [25, 41],
-                iconAnchor: [12.5, 41],
-                popupAnchor: [0, -41],
-                shadowUrl: MarkerShadow.src,
-                shadowSize: [41, 41],
-              })
-            }
-            position={coord}
-          >
-            <Popup>
-              A pretty CSS3 popup. <br /> Easily customizable.
-            </Popup>
-          </Marker>
+          {siteConfig.dummySpots.map((spot) => (
+            <Marker
+              key={spot.title}
+              icon={
+                new L.Icon({
+                  iconUrl: MarkerIcon.src,
+                  iconRetinaUrl: MarkerIcon.src,
+                  iconSize: [25, 41],
+                  iconAnchor: [12.5, 41],
+                  popupAnchor: [0, -41],
+                  shadowUrl: MarkerShadow.src,
+                  shadowSize: [41, 41],
+                })
+              }
+              position={spot.latlng}
+            >
+              <Popup>
+                {spot.title} <br /> {spot.description} <br /> {spot.tricks}
+              </Popup>
+            </Marker>
+          ))}
         </MapContainer>
       </div>
       <div className="mt-4 text-center">
