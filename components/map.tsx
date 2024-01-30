@@ -1,66 +1,29 @@
 "use client"
 
-import L, { LatLng } from "leaflet"
+import L from "leaflet"
+
+import "leaflet/dist/leaflet.css"
+import { useState } from "react"
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet"
 
 import MarkerIcon from "../node_modules/leaflet/dist/images/marker-icon.png"
 import MarkerShadow from "../node_modules/leaflet/dist/images/marker-shadow.png"
-import "leaflet/dist/leaflet.css"
-import { useState } from "react"
-import {
-  MapContainer,
-  Marker,
-  Popup,
-  TileLayer,
-  useMapEvents,
-} from "react-leaflet"
-
 import { Button } from "./ui/button"
 
 export default function Map() {
   const [coord, setCoord] = useState<L.LatLngExpression>([51.505, -0.09])
+  const [loading, setLoading] = useState(false)
 
   const getMyLocation = () => {
     if (navigator.geolocation) {
+      setLoading(true)
       navigator.geolocation.getCurrentPosition((position) => {
+        setLoading(false)
         setCoord([position.coords.latitude, position.coords.longitude])
       })
     } else {
       console.log("Geolocation is not supported by this browser.")
     }
-  }
-
-  function LocationMarker() {
-    const [position, setPosition] = useState<LatLng | null>(null)
-
-    const map = useMapEvents({
-      click(e) {
-        console.log(e)
-        setPosition(e.latlng)
-      },
-    })
-
-    return (
-      <>
-        {position && (
-          <Marker
-            position={position}
-            icon={
-              new L.Icon({
-                iconUrl: MarkerIcon.src,
-                iconRetinaUrl: MarkerIcon.src,
-                iconSize: [25, 41],
-                iconAnchor: [12.5, 41],
-                popupAnchor: [0, -41],
-                shadowUrl: MarkerShadow.src,
-                shadowSize: [41, 41],
-              })
-            }
-          >
-            <Popup>You are here</Popup>
-          </Marker>
-        )}
-      </>
-    )
   }
 
   return (
@@ -98,11 +61,12 @@ export default function Map() {
               A pretty CSS3 popup. <br /> Easily customizable.
             </Popup>
           </Marker>
-          <LocationMarker />
         </MapContainer>
       </div>
       <div className="mt-4 text-center">
-        <Button onClick={getMyLocation}>Get My Location</Button>
+        <Button onClick={getMyLocation}>
+          {loading ? "Loading..." : "Get my location"}
+        </Button>
       </div>
     </div>
   )
