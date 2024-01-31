@@ -1,5 +1,6 @@
 "use client"
 
+import { siteConfig } from "@/config/site"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
   Table,
@@ -9,19 +10,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-
-const spots = [
-  {
-    id: 1,
-    name: "アートギャラリー",
-    tricks: ["HeelFlip", "KickFlip"],
-  },
-  {
-    id: 2,
-    name: "ベンチ",
-    tricks: ["PopShuvit", "Ollie"],
-  },
-]
 
 export function SpotsTable() {
   return (
@@ -34,13 +22,13 @@ export function SpotsTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {spots.map((spot) => (
-          <TableRow key={spot.id}>
+        {siteConfig.dummySpots.map((spot) => (
+          <TableRow key={spot.title}>
             <TableCell>
               <Checkbox />
             </TableCell>
-            <TableCell>{spot.name}</TableCell>
-            <TableCell>{spot.tricks.join(", ")}</TableCell>
+            <TableCell>{spot.title}</TableCell>
+            <TableCell>{spot.tricks}</TableCell>
           </TableRow>
         ))}
       </TableBody>
