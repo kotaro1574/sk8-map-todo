@@ -15,4 +15,34 @@ export const siteConfig = {
     github: "https://github.com/shadcn/ui",
     docs: "https://ui.shadcn.com",
   },
+  defaultMapCenter: { lat: 49.27705877501251, lng: -123.10890913009645 },
+  dummySpots: [
+    {
+      title: "Starthcna",
+      tricks: "HeelFlip",
+      description: "do",
+      latlng: {
+        lat: 49.27917258267728,
+        lng: -123.08824539184572,
+      },
+    },
+    {
+      title: "Downtown",
+      tricks: "KickFlip",
+      description: "do",
+      latlng: {
+        lat: 49.28365187565408,
+        lng: -123.11862945556642,
+      },
+    },
+    {
+      title: "Curb under bridge",
+      tricks: "Front Tail Slide",
+      description: "do",
+      latlng: {
+        lat: 49.27322289267049,
+        lng: -123.11500310897829,
+      },
+    },
+  ],
 }

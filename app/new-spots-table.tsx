@@ -1,7 +1,6 @@
 "use client"
 
 import { siteConfig } from "@/config/site"
-import { Checkbox } from "@/components/ui/checkbox"
 import {
   Table,
   TableBody,
@@ -11,12 +10,11 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-export function SpotsTable() {
+export function NewSpotsTable() {
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[50px]" />
           <TableHead>Spots</TableHead>
           <TableHead>Selected Tricks</TableHead>
         </TableRow>
@@ -24,9 +22,6 @@ export function SpotsTable() {
       <TableBody>
         {siteConfig.dummySpots.map((spot) => (
           <TableRow key={spot.title}>
-            <TableCell>
-              <Checkbox />
-            </TableCell>
             <TableCell>{spot.title}</TableCell>
             <TableCell>{spot.tricks}</TableCell>
           </TableRow>
