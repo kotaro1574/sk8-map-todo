@@ -1,5 +1,7 @@
 "use client"
 
+import { useRouter } from "next/navigation"
+
 import { siteConfig } from "@/config/site"
 import {
   Table,
@@ -11,6 +13,7 @@ import {
 } from "@/components/ui/table"
 
 export function NewSpotsTable() {
+  const router = useRouter()
   return (
     <Table>
       <TableHeader>
@@ -21,7 +24,12 @@ export function NewSpotsTable() {
       </TableHeader>
       <TableBody>
         {siteConfig.dummySpots.map((spot) => (
-          <TableRow key={spot.id}>
+          <TableRow
+            className="cursor-pointer"
+            onClick={() => {
+              router.push(`/spots/${spot.id}`)
+            }}
+          >
             <TableCell>{spot.title}</TableCell>
             <TableCell>{spot.tricks}</TableCell>
           </TableRow>
