@@ -49,7 +49,7 @@ export default function Map() {
 
           {siteConfig.dummySpots.map((spot) => (
             <Marker
-              key={spot.title}
+              key={spot.id}
               icon={
                 new L.Icon({
                   iconUrl: MarkerIcon.src,

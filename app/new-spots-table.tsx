@@ -21,7 +21,7 @@ export function NewSpotsTable() {
       </TableHeader>
       <TableBody>
         {siteConfig.dummySpots.map((spot) => (
-          <TableRow key={spot.title}>
+          <TableRow key={spot.id}>
             <TableCell>{spot.title}</TableCell>
             <TableCell>{spot.tricks}</TableCell>
           </TableRow>

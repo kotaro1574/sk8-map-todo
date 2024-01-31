@@ -18,6 +18,7 @@ export const siteConfig = {
   defaultMapCenter: { lat: 49.27705877501251, lng: -123.10890913009645 },
   dummySpots: [
     {
+      id: 1,
       title: "Starthcna",
       tricks: "HeelFlip",
       description: "do",
@@ -27,6 +28,7 @@ export const siteConfig = {
       },
     },
     {
+      id: 2,
       title: "Downtown",
       tricks: "KickFlip",
       description: "do",
@@ -36,6 +38,7 @@ export const siteConfig = {
       },
     },
     {
+      id: 3,
       title: "Curb under bridge",
       tricks: "Front Tail Slide",
       description: "do",
