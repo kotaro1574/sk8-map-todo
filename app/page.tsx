@@ -4,12 +4,14 @@ import Link from "next/link"
 import { siteConfig } from "@/config/site"
 import { buttonVariants } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
+import { Skeleton } from "@/components/ui/skeleton"
 import { Icons } from "@/components/icons"
+import { MapSkeleton } from "@/components/map-skeleton"
 
 import { NewSpotsTable } from "./new-spots-table"
 
 const DynamicMap = dynamic(() => import("@/components/map"), {
-  loading: () => <p>A map is loading</p>,
+  loading: () => <MapSkeleton>🛹 🛹 🛹</MapSkeleton>,
   ssr: false,
 })
 

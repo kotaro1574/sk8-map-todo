@@ -4,9 +4,10 @@ import Link from "next/link"
 import { siteConfig } from "@/config/site"
 import { buttonVariants } from "@/components/ui/button"
 import { Icons } from "@/components/icons"
+import { MapSkeleton } from "@/components/map-skeleton"
 
 const DynamicMap = dynamic(() => import("@/components/map"), {
-  loading: () => <p>A map is loading</p>,
+  loading: () => <MapSkeleton>📹 📹 📹</MapSkeleton>,
   ssr: false,
 })
 
