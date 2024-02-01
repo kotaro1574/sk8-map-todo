@@ -1,22 +1,30 @@
 import dynamic from "next/dynamic"
 import Link from "next/link"
 
+import { siteConfig } from "@/config/site"
 import { buttonVariants } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
+import { Skeleton } from "@/components/ui/skeleton"
 import { Icons } from "@/components/icons"
+import { MapSkeleton } from "@/components/map-skeleton"
 
 import { NewSpotsTable } from "./new-spots-table"
 
 const DynamicMap = dynamic(() => import("@/components/map"), {
-  loading: () => <p>A map is loading</p>,
+  loading: () => <MapSkeleton>🛹 🛹 🛹</MapSkeleton>,
   ssr: false,
 })
 
 export default function IndexPage() {
   return (
     <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
-      <div className="w-full">
-        <DynamicMap />
+      <DynamicMap
+        center={siteConfig.defaultMapCenter}
+        spots={siteConfig.dummySpots}
+        isGetMyLocation
+        zoom={13}
+      />
+      <div>
         <div className="mt-4 flex items-center justify-between">
           <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
             New spots 📍

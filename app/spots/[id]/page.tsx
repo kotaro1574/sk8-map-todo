@@ -1,16 +1,50 @@
-import UpdateSpotForm from "./update-spot-form"
+import dynamic from "next/dynamic"
+import Link from "next/link"
 
-export default function SpotPage() {
+import { siteConfig } from "@/config/site"
+import { buttonVariants } from "@/components/ui/button"
+import { Icons } from "@/components/icons"
+import { MapSkeleton } from "@/components/map-skeleton"
+
+const DynamicMap = dynamic(() => import("@/components/map"), {
+  loading: () => <MapSkeleton>📹 📹 📹</MapSkeleton>,
+  ssr: false,
+})
+
+export default function SpotPage({ params }: { params: { id: string } }) {
   return (
     <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
-      <div className="flex max-w-[980px] flex-col items-start gap-2">
+      <div className="flex items-center justify-between">
         <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
-          Spot
+          {siteConfig.dummySpots.find((spot) => spot.id === params.id)?.title}
         </h1>
-        <div className="w-full">
-          <UpdateSpotForm />
-        </div>
+        <Link
+          href={`/spots/${params.id}/edit`}
+          className={buttonVariants({ variant: "ghost" })}
+        >
+          <Icons.edit className="mr-2 size-4" />
+          edit
+        </Link>
       </div>
+      <DynamicMap
+        center={
+          siteConfig.dummySpots.find((spot) => spot.id === params.id)?.latlng ||
+          siteConfig.defaultMapCenter
+        }
+        zoom={17}
+        spots={
+          siteConfig.dummySpots.find((spot) => spot.id === params.id) || []
+        }
+      />
+      <p className="text-2xl leading-relaxed tracking-tight md:text-xl">
+        {siteConfig.dummySpots.find((spot) => spot.id === params.id)?.tricks}
+      </p>
+      <p className="text-lg leading-relaxed tracking-tight md:text-xl">
+        {
+          siteConfig.dummySpots.find((spot) => spot.id === params.id)
+            ?.description
+        }
+      </p>
     </section>
   )
 }

@@ -23,7 +23,7 @@ export function SpotsTable() {
       </TableHeader>
       <TableBody>
         {siteConfig.dummySpots.map((spot) => (
-          <TableRow key={spot.title}>
+          <TableRow key={spot.id}>
             <TableCell>
               <Checkbox />
             </TableCell>
