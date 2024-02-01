@@ -16,9 +16,15 @@ type Props = {
   center: L.LatLngExpression
   spots: Spot[] | Spot
   isGetMyLocation?: boolean
+  zoom: number
 }
 
-export default function Map({ center, spots, isGetMyLocation = false }: Props) {
+export default function Map({
+  center,
+  spots,
+  isGetMyLocation = false,
+  zoom,
+}: Props) {
   const [coord, setCoord] = useState<L.LatLngExpression>(center)
   const [loading, setLoading] = useState(false)
 
@@ -44,7 +50,7 @@ export default function Map({ center, spots, isGetMyLocation = false }: Props) {
           }}
           center={coord}
           key={`${coord}`}
-          zoom={13}
+          zoom={zoom}
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
