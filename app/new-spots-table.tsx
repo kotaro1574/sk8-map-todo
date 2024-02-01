@@ -25,6 +25,7 @@ export function NewSpotsTable() {
       <TableBody>
         {siteConfig.dummySpots.map((spot) => (
           <TableRow
+            key={spot.id}
             className="cursor-pointer"
             onClick={() => {
               router.push(`/spots/${spot.id}`)
