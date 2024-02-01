@@ -1,4 +1,5 @@
 import {
+  Edit,
   LucideProps,
   Moon,
   Plus,
@@ -11,6 +12,7 @@ export type Icon = LucideIcon
 
 export const Icons = {
   sun: SunMedium,
+  edit: Edit,
   moon: Moon,
   plus: Plus,
   twitter: Twitter,
