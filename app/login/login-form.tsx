@@ -2,9 +2,11 @@
 
 import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
+import { Database } from "@/types/supabase"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -21,6 +23,7 @@ const formSchema = z.object({
 })
 
 export default function LoginForm() {
+  const supabase = createClientComponentClient<Database>()
   const [loading, setLoading] = useState(false)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -32,6 +35,16 @@ export default function LoginForm() {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setLoading(true)
+      const { error } = await supabase.auth.signInWithOtp({
+        email: values.email,
+        options: {
+          emailRedirectTo: process.env.NEXT_PUBLIC_REDIRECT_URL ?? "",
+        },
+      })
+
+      if (error) {
+        throw error
+      }
     } catch (error) {
       console.log(error)
     } finally {
