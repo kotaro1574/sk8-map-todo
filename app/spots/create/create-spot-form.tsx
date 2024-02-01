@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import dynamic from "next/dynamic"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useForm } from "react-hook-form"
 import { z } from "zod"
@@ -16,7 +17,15 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import LocationSelectMap from "@/components/location-select-map"
+import { MapSkeleton } from "@/components/map-skeleton"
+
+const DynamicLocationSelectMap = dynamic(
+  () => import("@/components/location-select-map"),
+  {
+    loading: () => <MapSkeleton>📍 📍 📍</MapSkeleton>,
+    ssr: false,
+  }
+)
 
 const formSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
@@ -105,7 +114,7 @@ export default function CreateSpotForm() {
           render={({ field: { onChange, value } }) => (
             <FormItem>
               <FormLabel>address</FormLabel>
-              <LocationSelectMap onChange={onChange} value={value} />
+              <DynamicLocationSelectMap onChange={onChange} value={value} />
             </FormItem>
           )}
         />
