@@ -9,20 +9,27 @@ export async function middleware(req: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
+  // ダイナミックルートのパスが一致するか確認するための正規表現
+  const editPathRegex = /^\/spots\/.+\/edit$/
+
   console.log(req.nextUrl.pathname, "req.nextUrl.pathname")
-  // if user is signed in and the current path is / redirect the user to /account
-  if (user && req.nextUrl.pathname === "/") {
+  // ユーザーがサインインしていて、現在のパスが/loginの場合、ユーザーを/accountにリダイレクトする。
+  if (user && req.nextUrl.pathname === "/login") {
     return NextResponse.redirect(new URL("/account", req.url))
   }
 
-  // if user is not signed in and the current path is not / redirect the user to /
-  if (!user && req.nextUrl.pathname !== "/") {
-    return NextResponse.redirect(new URL("/", req.url))
+  if (!user) {
+    if (
+      req.nextUrl.pathname.match(editPathRegex) ||
+      req.nextUrl.pathname === "/spots/create" ||
+      req.nextUrl.pathname === "/account"
+    ) {
+      return NextResponse.redirect(new URL("/login", req.url))
+    }
   }
-
   return res
 }
 
 export const config = {
-  matcher: ["/", "/account"],
+  matcher: ["/", "/account", "/login", "/spots/create", "/spots/:path*/edit"],
 }
