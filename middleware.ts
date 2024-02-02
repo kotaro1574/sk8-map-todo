@@ -9,11 +9,8 @@ export async function middleware(req: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // ダイナミックルートのパスが一致するか確認するための正規表現
   const editPathRegex = /^\/spots\/.+\/edit$/
 
-  console.log(req.nextUrl.pathname, "req.nextUrl.pathname")
-  // ユーザーがサインインしていて、現在のパスが/loginの場合、ユーザーを/accountにリダイレクトする。
   if (user && req.nextUrl.pathname === "/login") {
     return NextResponse.redirect(new URL("/account", req.url))
   }
