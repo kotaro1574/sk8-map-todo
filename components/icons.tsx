@@ -5,6 +5,7 @@ import {
   Plus,
   SunMedium,
   Twitter,
+  UserIcon,
   type Icon as LucideIcon,
 } from "lucide-react"
 
@@ -14,6 +15,7 @@ export const Icons = {
   sun: SunMedium,
   edit: Edit,
   moon: Moon,
+  user: UserIcon,
   plus: Plus,
   twitter: Twitter,
   logo: (props: LucideProps) => (

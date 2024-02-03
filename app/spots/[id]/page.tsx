@@ -13,7 +13,7 @@ const DynamicMap = dynamic(() => import("@/components/map"), {
 
 export default function SpotPage({ params }: { params: { id: string } }) {
   return (
-    <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
+    <section className="grid items-center gap-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
           {siteConfig.dummySpots.find((spot) => spot.id === params.id)?.title}

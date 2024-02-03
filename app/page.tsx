@@ -4,7 +4,6 @@ import Link from "next/link"
 import { siteConfig } from "@/config/site"
 import { buttonVariants } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { Skeleton } from "@/components/ui/skeleton"
 import { Icons } from "@/components/icons"
 import { MapSkeleton } from "@/components/map-skeleton"
 
@@ -17,7 +16,7 @@ const DynamicMap = dynamic(() => import("@/components/map"), {
 
 export default function IndexPage() {
   return (
-    <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
+    <section className="grid items-center gap-6">
       <DynamicMap
         center={siteConfig.defaultMapCenter}
         spots={siteConfig.dummySpots}

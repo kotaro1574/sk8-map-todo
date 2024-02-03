@@ -6,7 +6,7 @@ export const siteConfig = {
     "Register now for the spots you plan to shoot with your skateboard! 🛹 📹 ",
   mainNav: [
     {
-      title: "Home",
+      title: "Spots",
       href: "/",
     },
   ],
