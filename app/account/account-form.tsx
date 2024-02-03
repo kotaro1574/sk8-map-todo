@@ -63,9 +63,7 @@ export default function AccountForm({ profile, user }: Props) {
 
       const { error } = await supabase.from("profiles").upsert({
         id: user.id,
-
         username,
-
         avatar_url,
         updated_at: new Date().toISOString(),
       })
