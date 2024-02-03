@@ -44,6 +44,36 @@ export interface Database {
           }
         ]
       }
+      spots: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          is_completed: boolean
+          location: unknown | null
+          title: string
+          tricks: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          id?: string
+          is_completed?: boolean
+          location?: unknown | null
+          title?: string
+          tricks?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          is_completed?: boolean
+          location?: unknown | null
+          title?: string
+          tricks?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
