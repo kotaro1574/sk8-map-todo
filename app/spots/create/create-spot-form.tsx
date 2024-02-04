@@ -1,11 +1,14 @@
 "use client"
 
-import { useState } from "react"
+import { startTransition, useState } from "react"
 import dynamic from "next/dynamic"
+import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { Controller, useForm } from "react-hook-form"
 import { z } from "zod"
 
+import { Database } from "@/types/supabase"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -17,6 +20,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { useToast } from "@/components/ui/use-toast"
 import { MapSkeleton } from "@/components/map-skeleton"
 
 const DynamicLocationSelectMap = dynamic(
@@ -31,7 +35,7 @@ const formSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
   tricks: z.string(),
   description: z.string(),
-  latlng: z
+  location: z
     .object({
       lat: z.number(),
       lng: z.number(),
@@ -40,6 +44,9 @@ const formSchema = z.object({
 })
 
 export default function CreateSpotForm() {
+  const supabase = createClientComponentClient<Database>()
+  const router = useRouter()
+  const { toast } = useToast()
   const [loading, setLoading] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -48,14 +55,31 @@ export default function CreateSpotForm() {
       title: "",
       tricks: "",
       description: "",
-      latlng: null,
+      location: null,
     },
   })
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setLoading(true)
-      console.log(values)
+
+      const { error } = await supabase.from("spots").insert({
+        title: values.title,
+        tricks: values.tricks,
+        description: values.description,
+        location: values.location
+          ? `POINT(${values.location.lng} ${values.location.lat})`
+          : null,
+      })
+
+      if (error) throw error
+
+      toast({ description: "Commit created!" })
+      setLoading(false)
+      router.push("/")
+      startTransition(() => {
+        router.refresh()
+      })
     } catch (error) {
       console.error(error)
     } finally {
@@ -110,10 +134,10 @@ export default function CreateSpotForm() {
 
         <Controller
           control={form.control}
-          name="latlng"
+          name="location"
           render={({ field: { onChange, value } }) => (
             <FormItem>
-              <FormLabel>address</FormLabel>
+              <FormLabel>location</FormLabel>
               <DynamicLocationSelectMap onChange={onChange} value={value} />
             </FormItem>
           )}
