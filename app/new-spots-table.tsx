@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation"
 
+import { Database } from "@/types/supabase"
 import { siteConfig } from "@/config/site"
 import {
   Table,
@@ -12,7 +13,9 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-export function NewSpotsTable() {
+type Props = { spots: Database["public"]["Tables"]["spots"]["Row"][] }
+
+export function NewSpotsTable({ spots }: Props) {
   const router = useRouter()
   return (
     <Table>
@@ -23,7 +26,7 @@ export function NewSpotsTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {siteConfig.dummySpots.map((spot) => (
+        {spots.map((spot) => (
           <TableRow
             key={spot.id}
             className="cursor-pointer"
