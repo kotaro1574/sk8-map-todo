@@ -6,7 +6,7 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
-export interface Database {
+export type Database = {
   public: {
     Tables: {
       profiles: {
@@ -50,29 +50,40 @@ export interface Database {
           description: string
           id: string
           is_completed: boolean
-          location: unknown | null
-          title: string
-          tricks: string
+          location: unknown
+          name: string
+          updated_at: string
+          user_id: string
         }
         Insert: {
           created_at?: string
-          description?: string
+          description: string
           id?: string
-          is_completed?: boolean
-          location?: unknown | null
-          title?: string
-          tricks?: string
+          is_completed: boolean
+          location: unknown
+          name: string
+          updated_at?: string
+          user_id?: string
         }
         Update: {
           created_at?: string
           description?: string
           id?: string
           is_completed?: boolean
-          location?: unknown | null
-          title?: string
-          tricks?: string
+          location?: unknown
+          name?: string
+          updated_at?: string
+          user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "spots_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
       }
     }
     Views: {
@@ -91,6 +102,35 @@ export interface Database {
           object: string
         }
         Returns: Record<string, unknown>
+      }
+      nearby_spots: {
+        Args: {
+          lat: number
+          long: number
+        }
+        Returns: {
+          id: string
+          name: string
+          description: string
+          lat: number
+          long: number
+          dist_meters: number
+        }[]
+      }
+      spots_in_view: {
+        Args: {
+          min_lat: number
+          min_long: number
+          max_lat: number
+          max_long: number
+        }
+        Returns: {
+          id: string
+          name: string
+          description: string
+          lat: number
+          long: number
+        }[]
       }
     }
     Enums: {
