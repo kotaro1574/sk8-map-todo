@@ -35,10 +35,12 @@ const formSchema = z.object({
   name: z.string().min(1, { message: "Title is required" }),
   tricks: z.string(),
   description: z.string(),
-  location: z.object({
-    lat: z.number(),
-    lng: z.number(),
-  }),
+  location: z
+    .object({
+      lat: z.number(),
+      lng: z.number(),
+    })
+    .nullable(),
 })
 
 export default function CreateSpotForm() {
@@ -53,16 +55,18 @@ export default function CreateSpotForm() {
       name: "",
       tricks: "",
       description: "",
-      location: {
-        lat: 0,
-        lng: 0,
-      },
+      location: null,
     },
   })
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setLoading(true)
+
+      if (!values.location) {
+        toast({ description: "Location is required", variant: "destructive" })
+        return
+      }
 
       const { error } = await supabase.from("spots").insert({
         name: values.name,
