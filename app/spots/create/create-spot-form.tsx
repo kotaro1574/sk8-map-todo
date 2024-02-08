@@ -97,7 +97,7 @@ export default function CreateSpotForm() {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>title</FormLabel>
+              <FormLabel>name</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
