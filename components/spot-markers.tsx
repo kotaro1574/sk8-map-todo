@@ -1,5 +1,3 @@
-"use client"
-
 import { SupabaseClient } from "@supabase/auth-helpers-nextjs"
 import L from "leaflet"
 
