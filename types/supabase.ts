@@ -117,6 +117,20 @@ export type Database = {
           dist_meters: number
         }[]
       }
+      spot: {
+        Args: {
+          _id: string
+        }
+        Returns: {
+          id: string
+          name: string
+          description: string
+          is_completed: boolean
+          user_id: string
+          lat: number
+          long: number
+        }[]
+      }
       spots_in_view: {
         Args: {
           min_lat: number
