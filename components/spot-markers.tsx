@@ -38,7 +38,6 @@ export function SpotMarkers({
         })
 
         if (data) {
-          console.log("Spots in view:", data)
           setSpotsInView(data)
         }
       } catch (error) {
