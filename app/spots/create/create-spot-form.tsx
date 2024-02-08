@@ -32,15 +32,13 @@ const DynamicLocationSelectMap = dynamic(
 )
 
 const formSchema = z.object({
-  title: z.string().min(1, { message: "Title is required" }),
+  name: z.string().min(1, { message: "Title is required" }),
   tricks: z.string(),
   description: z.string(),
-  location: z
-    .object({
-      lat: z.number(),
-      lng: z.number(),
-    })
-    .nullable(),
+  location: z.object({
+    lat: z.number(),
+    lng: z.number(),
+  }),
 })
 
 export default function CreateSpotForm() {
@@ -52,10 +50,13 @@ export default function CreateSpotForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
+      name: "",
       tricks: "",
       description: "",
-      location: null,
+      location: {
+        lat: 0,
+        lng: 0,
+      },
     },
   })
 
@@ -64,12 +65,9 @@ export default function CreateSpotForm() {
       setLoading(true)
 
       const { error } = await supabase.from("spots").insert({
-        title: values.title,
-        tricks: values.tricks,
+        name: values.name,
         description: values.description,
-        location: values.location
-          ? `POINT(${values.location.lng} ${values.location.lat})`
-          : null,
+        location: `POINT(${values.location.lng} ${values.location.lat})`,
       })
 
       if (error) throw error
@@ -92,16 +90,16 @@ export default function CreateSpotForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
-          name="title"
+          name="name"
           render={({ field }) => (
             <FormItem>
               <FormLabel>title</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
-              {form.formState.errors.title && (
+              {form.formState.errors.name && (
                 <FormDescription>
-                  {form.formState.errors.title.message}
+                  {form.formState.errors.name.message}
                 </FormDescription>
               )}
             </FormItem>

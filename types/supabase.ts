@@ -59,7 +59,7 @@ export type Database = {
           created_at?: string
           description: string
           id?: string
-          is_completed: boolean
+          is_completed?: boolean
           location: unknown
           name: string
           updated_at?: string

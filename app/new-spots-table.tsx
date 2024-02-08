@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation"
 
 import { Database } from "@/types/supabase"
-import { siteConfig } from "@/config/site"
 import {
   Table,
   TableBody,
@@ -34,8 +33,7 @@ export function NewSpotsTable({ spots }: Props) {
               router.push(`/spots/${spot.id}`)
             }}
           >
-            <TableCell>{spot.title}</TableCell>
-            <TableCell>{spot.tricks}</TableCell>
+            <TableCell>{spot.name}</TableCell>
           </TableRow>
         ))}
       </TableBody>

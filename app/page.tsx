@@ -31,12 +31,10 @@ export default async function IndexPage() {
     throw error
   }
 
-  console.log(data)
   return (
     <section className="grid items-center gap-6">
       <DynamicMap
         center={siteConfig.defaultMapCenter}
-        spots={siteConfig.dummySpots}
         isGetMyLocation
         zoom={13}
       />

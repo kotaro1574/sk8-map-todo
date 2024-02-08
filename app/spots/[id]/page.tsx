@@ -32,9 +32,6 @@ export default function SpotPage({ params }: { params: { id: string } }) {
           siteConfig.defaultMapCenter
         }
         zoom={17}
-        spots={
-          siteConfig.dummySpots.find((spot) => spot.id === params.id) || []
-        }
       />
       <p className="text-2xl leading-relaxed tracking-tight md:text-xl">
         {siteConfig.dummySpots.find((spot) => spot.id === params.id)?.tricks}
