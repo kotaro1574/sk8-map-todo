@@ -8,6 +8,8 @@ import { buttonVariants } from "@/components/ui/button"
 import { Icons } from "@/components/icons"
 import { MapSkeleton } from "@/components/map-skeleton"
 
+import { SpotDropdownMenu } from "./spot-dropdown-menu"
+
 const DynamicMap = dynamic(() => import("@/components/map"), {
   loading: () => <MapSkeleton>📹 📹 📹</MapSkeleton>,
   ssr: false,
@@ -40,13 +42,7 @@ export default async function SpotPage({ params }: { params: { id: string } }) {
         <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
           {data.name}
         </h1>
-        <Link
-          href={`/spots/${params.id}/edit`}
-          className={buttonVariants({ variant: "ghost" })}
-        >
-          <Icons.edit className="mr-2 size-4" />
-          edit
-        </Link>
+        <SpotDropdownMenu spotId={params.id} />
       </div>
       <DynamicMap center={center} zoom={17} />
       <p className="text-2xl leading-relaxed tracking-tight md:text-xl">
