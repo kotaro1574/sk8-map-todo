@@ -1,11 +1,8 @@
 import dynamic from "next/dynamic"
 import { cookies } from "next/headers"
-import Link from "next/link"
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 
 import { Database } from "@/types/supabase"
-import { buttonVariants } from "@/components/ui/button"
-import { Icons } from "@/components/icons"
 import { MapSkeleton } from "@/components/map-skeleton"
 
 import { SpotDropdownMenu } from "./spot-dropdown-menu"
