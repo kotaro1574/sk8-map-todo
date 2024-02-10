@@ -50,30 +50,36 @@ export type Database = {
           description: string
           id: string
           is_completed: boolean
+          is_public: boolean
           location: unknown
           name: string
+          trick: string
           updated_at: string
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
           description: string
           id?: string
           is_completed?: boolean
+          is_public?: boolean
           location: unknown
           name: string
+          trick: string
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
           description?: string
           id?: string
           is_completed?: boolean
+          is_public?: boolean
           location?: unknown
           name?: string
+          trick?: string
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
