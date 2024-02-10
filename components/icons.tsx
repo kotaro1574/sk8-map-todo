@@ -2,8 +2,10 @@ import {
   Edit,
   LucideProps,
   Moon,
+  MoreHorizontal,
   Plus,
   SunMedium,
+  Trash2,
   Twitter,
   UserIcon,
   type Icon as LucideIcon,
@@ -17,6 +19,8 @@ export const Icons = {
   moon: Moon,
   user: UserIcon,
   plus: Plus,
+  trash: Trash2,
+  more: MoreHorizontal,
   twitter: Twitter,
   logo: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>

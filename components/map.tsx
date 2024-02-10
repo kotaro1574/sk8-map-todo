@@ -1,30 +1,34 @@
 "use client"
 
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import L from "leaflet"
 
 import "leaflet/dist/leaflet.css"
 import { useState } from "react"
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet"
+import { MapContainer, TileLayer } from "react-leaflet"
 
 import { Spot } from "@/types/spot"
+import { Database } from "@/types/supabase"
 
-import MarkerIcon from "../node_modules/leaflet/dist/images/marker-icon.png"
-import MarkerShadow from "../node_modules/leaflet/dist/images/marker-shadow.png"
+import { SpotMarkers } from "./spot-markers"
 import { Button } from "./ui/button"
+
+type SpotInView = {
+  id: string
+  name: string
+  description: string
+  lat: number
+  long: number
+}
 
 type Props = {
   center: L.LatLngExpression
-  spots: Spot[] | Spot
   isGetMyLocation?: boolean
   zoom: number
 }
 
-export default function Map({
-  center,
-  spots,
-  isGetMyLocation = false,
-  zoom,
-}: Props) {
+export default function Map({ center, isGetMyLocation = false, zoom }: Props) {
+  const supabase = createClientComponentClient<Database>()
   const [coord, setCoord] = useState<L.LatLngExpression>(center)
   const [loading, setLoading] = useState(false)
 
@@ -57,49 +61,7 @@ export default function Map({
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
 
-          {Array.isArray(spots) ? (
-            spots.map((spot) => (
-              <Marker
-                key={spot.id}
-                icon={
-                  new L.Icon({
-                    iconUrl: MarkerIcon.src,
-                    iconRetinaUrl: MarkerIcon.src,
-                    iconSize: [25, 41],
-                    iconAnchor: [12.5, 41],
-                    popupAnchor: [0, -41],
-                    shadowUrl: MarkerShadow.src,
-                    shadowSize: [41, 41],
-                  })
-                }
-                position={spot.latlng}
-              >
-                <Popup>
-                  {spot.title} <br /> {spot.description} <br /> {spot.tricks}
-                </Popup>
-              </Marker>
-            ))
-          ) : (
-            <Marker
-              key={spots.id}
-              icon={
-                new L.Icon({
-                  iconUrl: MarkerIcon.src,
-                  iconRetinaUrl: MarkerIcon.src,
-                  iconSize: [25, 41],
-                  iconAnchor: [12.5, 41],
-                  popupAnchor: [0, -41],
-                  shadowUrl: MarkerShadow.src,
-                  shadowSize: [41, 41],
-                })
-              }
-              position={spots.latlng}
-            >
-              <Popup>
-                {spots.title} <br /> {spots.description} <br /> {spots.tricks}
-              </Popup>
-            </Marker>
-          )}
+          <SpotMarkers supabase={supabase} />
         </MapContainer>
       </div>
       {isGetMyLocation && (

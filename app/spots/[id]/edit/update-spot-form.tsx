@@ -1,10 +1,14 @@
 "use client"
 
-import { useState } from "react"
+import { startTransition, useState } from "react"
+import dynamic from "next/dynamic"
+import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { Controller, useForm } from "react-hook-form"
 import { z } from "zod"
 
+import { Database } from "@/types/supabase"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -16,28 +20,77 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { useToast } from "@/components/ui/use-toast"
+import { MapSkeleton } from "@/components/map-skeleton"
+
+const DynamicLocationSelectMap = dynamic(
+  () => import("@/components/location-select-map"),
+  {
+    loading: () => <MapSkeleton>📍 📍 📍</MapSkeleton>,
+    ssr: false,
+  }
+)
 
 const formSchema = z.object({
-  title: z.string().min(1, { message: "Title is required" }),
-  tricks: z.array(z.string()),
+  name: z.string().min(1, { message: "Title is required" }),
   description: z.string(),
+  location: z
+    .object({
+      lat: z.number(),
+      lng: z.number(),
+    })
+    .nullable(),
 })
 
-export default function UpdateSpotForm() {
+type Props = {
+  spot: Database["public"]["Functions"]["spot"]["Returns"][0]
+}
+
+export default function UpdateSpotForm({ spot }: Props) {
+  const supabase = createClientComponentClient<Database>()
+  const router = useRouter()
+  const { toast } = useToast()
   const [loading, setLoading] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      tricks: [],
-      description: "",
+      name: spot.name,
+      description: spot.description,
+      location: {
+        lat: spot.lat,
+        lng: spot.long,
+      },
     },
   })
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setLoading(true)
+
+      if (!values.location) {
+        toast({ description: "Location is required", variant: "destructive" })
+        return
+      }
+
+      const { error } = await supabase
+        .from("spots")
+        .update({
+          name: values.name,
+          description: values.description,
+          location: `POINT(${values.location.lng} ${values.location.lat})`,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", spot.id)
+
+      if (error) throw error
+
+      toast({ description: "Commit created!" })
+      setLoading(false)
+      router.push("/")
+      startTransition(() => {
+        router.refresh()
+      })
     } catch (error) {
       console.error(error)
     } finally {
@@ -50,33 +103,22 @@ export default function UpdateSpotForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
-          name="title"
+          name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>title</FormLabel>
+              <FormLabel>name</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
-              {form.formState.errors.title && (
+              {form.formState.errors.name && (
                 <FormDescription>
-                  {form.formState.errors.title.message}
+                  {form.formState.errors.name.message}
                 </FormDescription>
               )}
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="tricks"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>tricks</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-            </FormItem>
-          )}
-        />
+
         <FormField
           control={form.control}
           name="description"
@@ -86,6 +128,17 @@ export default function UpdateSpotForm() {
               <FormControl>
                 <Textarea {...field} />
               </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <Controller
+          control={form.control}
+          name="location"
+          render={({ field: { onChange, value } }) => (
+            <FormItem>
+              <FormLabel>location</FormLabel>
+              <DynamicLocationSelectMap onChange={onChange} value={value} />
             </FormItem>
           )}
         />

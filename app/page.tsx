@@ -1,6 +1,9 @@
 import dynamic from "next/dynamic"
+import { cookies } from "next/headers"
 import Link from "next/link"
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 
+import { Database } from "@/types/supabase"
 import { siteConfig } from "@/config/site"
 import { buttonVariants } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
@@ -14,12 +17,24 @@ const DynamicMap = dynamic(() => import("@/components/map"), {
   ssr: false,
 })
 
-export default function IndexPage() {
+export default async function IndexPage() {
+  const cookieStore = cookies()
+  const supabase = createServerComponentClient<Database>({
+    cookies: () => cookieStore,
+  })
+
+  const { data, error, status } = await supabase.from("spots").select("*")
+
+  if (!data) return null
+
+  if (error && status !== 406) {
+    throw error
+  }
+
   return (
     <section className="grid items-center gap-6">
       <DynamicMap
         center={siteConfig.defaultMapCenter}
-        spots={siteConfig.dummySpots}
         isGetMyLocation
         zoom={13}
       />
@@ -37,7 +52,7 @@ export default function IndexPage() {
           </Link>
         </div>
         <Separator className="mt-2" />
-        <NewSpotsTable />
+        <NewSpotsTable spots={data} />
       </div>
     </section>
   )

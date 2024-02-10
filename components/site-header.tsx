@@ -16,7 +16,7 @@ export function SiteHeader({
   avatar_url: string | null
 }) {
   return (
-    <header className="sticky top-0 z-[1100] w-full border-b bg-background">
+    <header className="sticky top-0 z-[1200] w-full border-b bg-background">
       <div className="container flex h-16 items-center justify-between space-x-4 px-4 sm:space-x-0 md:px-8">
         <MainNav items={siteConfig.mainNav} />
         <nav className="hidden items-center space-x-1 sm:flex">
