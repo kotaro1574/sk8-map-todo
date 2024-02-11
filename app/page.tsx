@@ -6,11 +6,10 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 import { Database } from "@/types/supabase"
 import { siteConfig } from "@/config/site"
 import { buttonVariants } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Icons } from "@/components/icons"
 import { MapSkeleton } from "@/components/map-skeleton"
-
-import { NewSpotsTable } from "./new-spots-table"
 
 const DynamicMap = dynamic(() => import("@/components/map"), {
   loading: () => <MapSkeleton>🛹 🛹 🛹</MapSkeleton>,
@@ -23,7 +22,10 @@ export default async function IndexPage() {
     cookies: () => cookieStore,
   })
 
-  const { data, error, status } = await supabase.from("spots").select("*")
+  const { data, error, status } = await supabase
+    .from("spots")
+    .select("*")
+    .eq("is_public", true)
 
   if (!data) return null
 
@@ -51,8 +53,17 @@ export default async function IndexPage() {
             new spot
           </Link>
         </div>
-        <Separator className="mt-2" />
-        <NewSpotsTable spots={data} />
+        <Separator className="my-4" />
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {data.map((spot) => (
+            <Card key={spot.id}>
+              <CardContent className="p-4">
+                <h2 className="text-xl font-bold">{spot.name}</h2>
+                <p className="mt-2">{spot.description}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </div>
     </section>
   )

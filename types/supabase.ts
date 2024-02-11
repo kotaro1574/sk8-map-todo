@@ -148,6 +148,7 @@ export type Database = {
           id: string
           name: string
           description: string
+          is_public: boolean
           lat: number
           long: number
         }[]
