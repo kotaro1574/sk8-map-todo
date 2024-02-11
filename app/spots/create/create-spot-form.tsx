@@ -5,11 +5,13 @@ import dynamic from "next/dynamic"
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { Loader2 } from "lucide-react"
 import { Controller, useForm } from "react-hook-form"
 import { z } from "zod"
 
 import { Database } from "@/types/supabase"
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
   Form,
   FormControl,
@@ -33,7 +35,7 @@ const DynamicLocationSelectMap = dynamic(
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "Title is required" }),
-  tricks: z.string(),
+  trick: z.string(),
   description: z.string(),
   location: z
     .object({
@@ -41,6 +43,7 @@ const formSchema = z.object({
       lng: z.number(),
     })
     .nullable(),
+  isPublic: z.boolean(),
 })
 
 export default function CreateSpotForm() {
@@ -53,9 +56,10 @@ export default function CreateSpotForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      tricks: "",
+      trick: "",
       description: "",
       location: null,
+      isPublic: false,
     },
   })
 
@@ -70,8 +74,10 @@ export default function CreateSpotForm() {
 
       const { error } = await supabase.from("spots").insert({
         name: values.name,
+        trick: values.trick,
         description: values.description,
         location: `POINT(${values.location.lng} ${values.location.lat})`,
+        is_public: values.isPublic,
       })
 
       if (error) throw error
@@ -94,6 +100,29 @@ export default function CreateSpotForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
+          name="isPublic"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="terms"
+                    checked={field.value}
+                    onCheckedChange={(checked) => field.onChange(checked)}
+                  />
+                  <label
+                    htmlFor="terms"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    Publish a spot
+                  </label>
+                </div>
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem>
@@ -111,10 +140,10 @@ export default function CreateSpotForm() {
         />
         <FormField
           control={form.control}
-          name="tricks"
+          name="trick"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>tricks</FormLabel>
+              <FormLabel>trick</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -145,8 +174,8 @@ export default function CreateSpotForm() {
           )}
         />
 
-        <Button className="block w-full" type="submit">
-          {loading ? "loading.." : "Create"}
+        <Button className="block w-full" disabled={loading} type="submit">
+          {loading ? "loading..." : "Create"}
         </Button>
       </form>
     </Form>
