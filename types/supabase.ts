@@ -50,8 +50,10 @@ export type Database = {
           description: string
           id: string
           is_completed: boolean
+          is_public: boolean
           location: unknown
           name: string
+          trick: string
           updated_at: string
           user_id: string
         }
@@ -60,8 +62,10 @@ export type Database = {
           description: string
           id?: string
           is_completed?: boolean
+          is_public?: boolean
           location: unknown
           name: string
+          trick: string
           updated_at?: string
           user_id?: string
         }
@@ -70,8 +74,10 @@ export type Database = {
           description?: string
           id?: string
           is_completed?: boolean
+          is_public?: boolean
           location?: unknown
           name?: string
+          trick?: string
           updated_at?: string
           user_id?: string
         }
@@ -142,6 +148,7 @@ export type Database = {
           id: string
           name: string
           description: string
+          is_public: boolean
           lat: number
           long: number
         }[]

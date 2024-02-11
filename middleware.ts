@@ -9,11 +9,13 @@ export async function middleware(req: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  const editPathRegex = /^\/spots\/.+\/edit$/
-
-  if (user && req.nextUrl.pathname === "/login") {
-    return NextResponse.redirect(new URL("/account", req.url))
+  if (user) {
+    if (req.nextUrl.pathname === "/login") {
+      return NextResponse.redirect(new URL("/account", req.url))
+    }
   }
+
+  const editPathRegex = /^\/spots\/.+\/edit$/
 
   if (!user) {
     if (

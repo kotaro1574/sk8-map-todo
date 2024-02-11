@@ -30,12 +30,14 @@ export function SpotMarkers({
     const fetchSpotsInView = async () => {
       try {
         const bounds = map.getBounds()
-        const { data } = await supabase.rpc("spots_in_view", {
-          min_lat: bounds.getSouthWest().lat,
-          min_long: bounds.getSouthWest().lng,
-          max_lat: bounds.getNorthEast().lat,
-          max_long: bounds.getNorthEast().lng,
-        })
+        const { data } = await supabase
+          .rpc("spots_in_view", {
+            min_lat: bounds.getSouthWest().lat,
+            min_long: bounds.getSouthWest().lng,
+            max_lat: bounds.getNorthEast().lat,
+            max_long: bounds.getNorthEast().lng,
+          })
+          .eq("is_public", true)
 
         if (data) {
           setSpotsInView(data)
