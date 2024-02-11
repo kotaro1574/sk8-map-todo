@@ -46,7 +46,7 @@ export default async function IndexPage() {
             New spots 📍
           </h1>
           <Link
-            href={"/spots/create"}
+            href={"/s/create"}
             className={buttonVariants({ variant: "ghost" })}
           >
             <Icons.plus className="mr-2 size-4" />
@@ -56,12 +56,14 @@ export default async function IndexPage() {
         <Separator className="my-4" />
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {data.map((spot) => (
-            <Card key={spot.id}>
-              <CardContent className="p-4">
-                <h2 className="text-xl font-bold">{spot.name}</h2>
-                <p className="mt-2">{spot.description}</p>
-              </CardContent>
-            </Card>
+            <Link key={spot.id} href={`/s/${spot.id}`}>
+              <Card>
+                <CardContent className="p-4">
+                  <h2 className="text-xl font-bold">{spot.name}</h2>
+                  <p className="mt-2">{spot.description}</p>
+                </CardContent>
+              </Card>
+            </Link>
           ))}
         </div>
       </div>

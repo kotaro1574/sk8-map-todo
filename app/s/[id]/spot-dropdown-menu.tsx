@@ -53,7 +53,7 @@ export function SpotDropdownMenu({ spotId }: { spotId: string }) {
         <Icons.more className="size-6" />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="z-[1100]">
-        <Link href={`/spots/${spotId}/edit`}>
+        <Link href={`/s/${spotId}/edit`}>
           <DropdownMenuItem>
             <Icons.edit className="mr-2 size-4" />
             Edit
