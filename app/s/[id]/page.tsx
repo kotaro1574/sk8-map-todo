@@ -3,6 +3,9 @@ import { cookies } from "next/headers"
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 
 import { Database } from "@/types/supabase"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
 import { MapSkeleton } from "@/components/map-skeleton"
 
 import { SpotDropdownMenu } from "./spot-dropdown-menu"
@@ -18,36 +21,71 @@ export default async function SpotPage({ params }: { params: { id: string } }) {
     cookies: () => cookieStore,
   })
 
-  const { data, error, status } = await supabase
-    .rpc("spot", { _id: params.id })
-    .single()
+  const {
+    data: spots,
+    error: spotsError,
+    status: spotsStatus,
+  } = await supabase.rpc("spot", { _id: params.id }).single()
 
-  if (!data) return null
+  if (!spots) return null
 
-  if (error && status !== 406) {
-    throw error
+  if (spotsError && spotsStatus !== 406) {
+    throw spotsError
   }
 
   const center = {
-    lat: data.lat,
-    lng: data.long,
+    lat: spots.lat,
+    lng: spots.long,
+  }
+
+  const {
+    data: user,
+    error: userError,
+    status: userStatus,
+  } = await supabase
+    .from("profiles")
+    .select("username")
+    .eq("id", spots.user_id)
+    .single()
+
+  if (!user) return null
+
+  if (userError && userStatus !== 406) {
+    throw userError
   }
 
   return (
     <section className="grid items-center gap-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
-          {data.name}
-        </h1>
+        <div className="flex items-end gap-4">
+          <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
+            {spots.name}
+          </h1>
+          <Badge variant={spots.is_completed ? "success" : "warning"}>
+            {spots.is_completed ? "Make" : "No make"}
+          </Badge>
+        </div>
         <SpotDropdownMenu spotId={params.id} />
       </div>
-      <DynamicMap center={center} zoom={17} />
-      <p className="text-2xl leading-relaxed tracking-tight md:text-xl">
-        {data.name}
-      </p>
-      <p className="text-lg leading-relaxed tracking-tight md:text-xl">
-        {data.description}
-      </p>
+      <div className="grid gap-4 md:grid-cols-2">
+        <DynamicMap center={center} zoom={17} />
+
+        <div className="flex flex-col justify-between">
+          <div>
+            <p className="text-2xl font-bold leading-relaxed tracking-tight md:text-xl">
+              {`Taking on the challenge a ${spots.trick} here.`}
+            </p>
+            <p className="text-lg leading-relaxed tracking-tight md:text-xl">
+              {spots.description}
+            </p>
+          </div>
+          <p className="text-md mt-4 text-end text-muted-foreground">
+            {user.username} created this spot.
+          </p>
+        </div>
+      </div>
+      <Separator className="my-4" />
+      <Button variant={"success"}>Made up 🎉</Button>
     </section>
   )
 }
