@@ -10,6 +10,7 @@ import { z } from "zod"
 
 import { Database } from "@/types/supabase"
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
   Form,
   FormControl,
@@ -33,6 +34,7 @@ const DynamicLocationSelectMap = dynamic(
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "Title is required" }),
+  trick: z.string(),
   description: z.string(),
   location: z
     .object({
@@ -40,6 +42,7 @@ const formSchema = z.object({
       lng: z.number(),
     })
     .nullable(),
+  isPublic: z.boolean(),
 })
 
 type Props = {
@@ -56,11 +59,13 @@ export default function UpdateSpotForm({ spot }: Props) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: spot.name,
+      trick: spot.trick,
       description: spot.description,
       location: {
         lat: spot.lat,
         lng: spot.long,
       },
+      isPublic: spot.is_public,
     },
   })
 
@@ -77,15 +82,17 @@ export default function UpdateSpotForm({ spot }: Props) {
         .from("spots")
         .update({
           name: values.name,
+          trick: values.trick,
           description: values.description,
           location: `POINT(${values.location.lng} ${values.location.lat})`,
+          is_public: values.isPublic,
           updated_at: new Date().toISOString(),
         })
         .eq("id", spot.id)
 
       if (error) throw error
 
-      toast({ description: "Commit created!" })
+      toast({ description: "Commit updated!" })
       setLoading(false)
       router.push("/")
       startTransition(() => {
@@ -97,10 +104,32 @@ export default function UpdateSpotForm({ spot }: Props) {
       setLoading(false)
     }
   }
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <FormField
+          control={form.control}
+          name="isPublic"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="terms"
+                    checked={field.value}
+                    onCheckedChange={(checked) => field.onChange(checked)}
+                  />
+                  <label
+                    htmlFor="terms"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    Publish a spot
+                  </label>
+                </div>
+              </FormControl>
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="name"
@@ -118,7 +147,18 @@ export default function UpdateSpotForm({ spot }: Props) {
             </FormItem>
           )}
         />
-
+        <FormField
+          control={form.control}
+          name="trick"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>trick</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="description"
@@ -143,8 +183,8 @@ export default function UpdateSpotForm({ spot }: Props) {
           )}
         />
 
-        <Button className="block w-full" type="submit">
-          {loading ? "loading.." : "Create"}
+        <Button className="block w-full" disabled={loading} type="submit">
+          {loading ? "loading..." : "Update spot"}
         </Button>
       </form>
     </Form>
