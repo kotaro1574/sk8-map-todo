@@ -4,6 +4,7 @@ import {
   Moon,
   MoreHorizontal,
   Plus,
+  Settings,
   SunMedium,
   Trash2,
   Twitter,
@@ -20,6 +21,7 @@ export const Icons = {
   user: UserIcon,
   plus: Plus,
   trash: Trash2,
+  settings: Settings,
   more: MoreHorizontal,
   twitter: Twitter,
   logo: (props: LucideProps) => (

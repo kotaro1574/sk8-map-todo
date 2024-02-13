@@ -23,7 +23,7 @@ export function SiteHeader({
           {session ? (
             <Link
               className={buttonVariants({ variant: "ghost", size: "icon" })}
-              href={"/account"}
+              href={`/${session.user.id}`}
             >
               <Avatar url={avatar_url ?? ""} size={avatar_url ? 30 : 20} />
             </Link>

@@ -130,7 +130,9 @@ export type Database = {
         Returns: {
           id: string
           name: string
+          trick: string
           description: string
+          is_public: boolean
           is_completed: boolean
           user_id: string
           lat: number
