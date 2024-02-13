@@ -67,13 +67,13 @@ export default async function SpotPage({ params }: { params: { id: string } }) {
         </div>
         <SpotDropdownMenu spotId={params.id} />
       </div>
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="mx-auto grid w-full max-w-[400px] gap-4">
         <DynamicMap center={center} zoom={17} />
 
         <div className="flex flex-col justify-between">
           <div>
             <p className="text-2xl font-bold leading-relaxed tracking-tight md:text-xl">
-              {`Taking on the challenge a ${spots.trick} here.`}
+              {`${user.username} does ${spots.trick} here.`}
             </p>
             <p className="text-lg leading-relaxed tracking-tight md:text-xl">
               {spots.description}
@@ -85,7 +85,7 @@ export default async function SpotPage({ params }: { params: { id: string } }) {
         </div>
       </div>
       <Separator className="my-4" />
-      <Button variant={"success"}>Made up 🎉</Button>
+      <Button variant={"success"}>Make 🎉</Button>
     </section>
   )
 }
