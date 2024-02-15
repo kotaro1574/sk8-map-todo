@@ -47,11 +47,11 @@ export function SpotCompletedButton({
 
   return !isCompleted ? (
     <Button disabled={isLoading} variant={"success"} onClick={onMakeOrNomake}>
-      {isLoading ? "...loading" : "Make 🎉"}
+      {isLoading ? "...loading" : "Make"}
     </Button>
   ) : (
     <Button disabled={isLoading} variant={"warning"} onClick={onMakeOrNomake}>
-      {isLoading ? "...loading" : "No make 😒"}
+      {isLoading ? "...loading" : "No make"}
     </Button>
   )
 }
