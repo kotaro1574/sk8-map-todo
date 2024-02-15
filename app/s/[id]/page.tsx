@@ -24,6 +24,10 @@ export default async function SpotPage({ params }: { params: { id: string } }) {
   })
 
   const {
+    data: { session },
+  } = await supabase.auth.getSession()
+
+  const {
     data: spot,
     error: spotError,
     status: spotStatus,
@@ -67,7 +71,9 @@ export default async function SpotPage({ params }: { params: { id: string } }) {
             {spot.is_completed ? "Make" : "No make"}
           </Badge>
         </div>
-        <SpotDropdownMenu spotId={params.id} />
+        {session && session.user.id === spot.user_id && (
+          <SpotDropdownMenu spotId={params.id} />
+        )}
       </div>
       <div className="mx-auto grid w-full max-w-[400px] gap-6">
         <DynamicMap center={center} zoom={17} />
@@ -76,15 +82,31 @@ export default async function SpotPage({ params }: { params: { id: string } }) {
           {spot.description}
         </p>
 
-        <p className="text-md text-end text-muted-foreground">
-          <Link href={`/${user.id}`} className="mt-2 hover:underline">
-            {user.username}
-          </Link>
-          {` does ${spot.trick} here.`}
-        </p>
+        {session ? (
+          <p className="text-md text-end text-muted-foreground">
+            <Link href={`/${user.id}`} className="mt-2 hover:underline">
+              {user.username}
+            </Link>
+            {` does ${spot.trick} here.`}
+          </p>
+        ) : (
+          <p className="text-md text-end text-muted-foreground">
+            <Link href={`/${user.id}`} className="mt-2 hover:underline">
+              {user.username}
+            </Link>
+            {` created this spot.`}
+          </p>
+        )}
       </div>
-      <Separator className="my-4" />
-      <SpotCompletedButton isCompleted={spot.is_completed} spotId={spot.id} />
+      {session && session.user.id === spot.user_id && (
+        <>
+          <Separator className="my-4" />
+          <SpotCompletedButton
+            isCompleted={spot.is_completed}
+            spotId={spot.id}
+          />
+        </>
+      )}
     </section>
   )
 }

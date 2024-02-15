@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { Session } from "@supabase/supabase-js"
 
 import { Database } from "@/types/supabase"
 import { Card, CardContent } from "@/components/ui/card"
@@ -9,9 +10,10 @@ import { SpotCompletedButton } from "@/components/spot-completed-button"
 
 type Props = {
   spots: Database["public"]["Tables"]["spots"]["Row"][]
+  session: Session | null
 }
 
-export function UserSpotsTabs({ spots }: Props) {
+export function UserSpotsTabs({ spots, session }: Props) {
   return (
     <Tabs defaultValue="no-make">
       <TabsList>
@@ -32,10 +34,12 @@ export function UserSpotsTabs({ spots }: Props) {
                 </Link>
                 <div className="mt-2 flex items-start justify-between">
                   <p>trick: {spot.trick}</p>
-                  <SpotCompletedButton
-                    isCompleted={spot.is_completed}
-                    spotId={spot.id}
-                  />
+                  {session && session.user.id === spot.user_id && (
+                    <SpotCompletedButton
+                      isCompleted={spot.is_completed}
+                      spotId={spot.id}
+                    />
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -55,10 +59,12 @@ export function UserSpotsTabs({ spots }: Props) {
                 </Link>
                 <div className="mt-2 flex items-start justify-between">
                   <p>trick: {spot.trick}</p>
-                  <SpotCompletedButton
-                    isCompleted={spot.is_completed}
-                    spotId={spot.id}
-                  />
+                  {session && session.user.id === spot.user_id && (
+                    <SpotCompletedButton
+                      isCompleted={spot.is_completed}
+                      spotId={spot.id}
+                    />
+                  )}
                 </div>
               </CardContent>
             </Card>
