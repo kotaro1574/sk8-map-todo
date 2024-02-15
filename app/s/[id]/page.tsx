@@ -1,8 +1,10 @@
 import dynamic from "next/dynamic"
 import { cookies } from "next/headers"
+import Link from "next/link"
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 
 import { Database } from "@/types/supabase"
+import { Avatar } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { MapSkeleton } from "@/components/map-skeleton"
@@ -44,7 +46,7 @@ export default async function SpotPage({ params }: { params: { id: string } }) {
     status: userStatus,
   } = await supabase
     .from("profiles")
-    .select("username")
+    .select("username, id, avatar_url")
     .eq("id", spot.user_id)
     .single()
 
@@ -75,7 +77,10 @@ export default async function SpotPage({ params }: { params: { id: string } }) {
         </p>
 
         <p className="text-md text-end text-muted-foreground">
-          {`${user.username} does ${spot.trick} here.`}
+          <Link href={`/${user.id}`} className="mt-2 hover:underline">
+            {user.username}
+          </Link>
+          {` does ${spot.trick} here.`}
         </p>
       </div>
       <Separator className="my-4" />
