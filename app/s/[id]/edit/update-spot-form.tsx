@@ -92,7 +92,7 @@ export default function UpdateSpotForm({ spot }: Props) {
 
       if (error) throw error
 
-      toast({ description: "Commit updated!" })
+      toast({ description: "Spot updated!" })
       setLoading(false)
       router.push("/")
       startTransition(() => {

@@ -22,6 +22,10 @@ export default async function IndexPage() {
     cookies: () => cookieStore,
   })
 
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+
   const { data, error, status } = await supabase
     .from("spots")
     .select("*")
@@ -45,13 +49,15 @@ export default async function IndexPage() {
           <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
             New spots 📍
           </h1>
-          <Link
-            href={"/s/create"}
-            className={buttonVariants({ variant: "ghost" })}
-          >
-            <Icons.plus className="mr-2 size-4" />
-            new spot
-          </Link>
+          {session && (
+            <Link
+              href={"/s/create"}
+              className={buttonVariants({ variant: "ghost" })}
+            >
+              <Icons.plus className="mr-2 size-4" />
+              new spot
+            </Link>
+          )}
         </div>
         <Separator className="my-4" />
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">

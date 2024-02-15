@@ -5,9 +5,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 
 import { Database } from "@/types/supabase"
 import { Avatar } from "@/components/ui/avatar"
-import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Icons } from "@/components/icons"
 import { MapSkeleton } from "@/components/map-skeleton"
 
@@ -27,6 +25,10 @@ export default async function UserPage({
   const supabase = createServerComponentClient<Database>({
     cookies: () => cookieStore,
   })
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
 
   const {
     data: user,
@@ -61,11 +63,15 @@ export default async function UserPage({
         <h1 className="text-2xl font-extrabold leading-tight tracking-tighter md:text-4xl">
           {user.username}
         </h1>
-        <Link href={"/account"}>
-          <Icons.settings className="size-6" />
-        </Link>
+        {session && session.user.id === user.id ? (
+          <Link href={"/account"}>
+            <Icons.settings className="size-6" />
+          </Link>
+        ) : (
+          <div />
+        )}
       </div>
-      <UserSpotsTabs spots={spots ?? []} />
+      <UserSpotsTabs spots={spots ?? []} session={session} />
     </section>
   )
 }

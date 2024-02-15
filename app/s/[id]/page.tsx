@@ -1,12 +1,14 @@
 import dynamic from "next/dynamic"
 import { cookies } from "next/headers"
+import Link from "next/link"
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 
 import { Database } from "@/types/supabase"
+import { Avatar } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { MapSkeleton } from "@/components/map-skeleton"
+import { SpotCompletedButton } from "@/components/spot-completed-button"
 
 import { SpotDropdownMenu } from "./spot-dropdown-menu"
 
@@ -22,20 +24,24 @@ export default async function SpotPage({ params }: { params: { id: string } }) {
   })
 
   const {
-    data: spots,
-    error: spotsError,
-    status: spotsStatus,
+    data: { session },
+  } = await supabase.auth.getSession()
+
+  const {
+    data: spot,
+    error: spotError,
+    status: spotStatus,
   } = await supabase.rpc("spot", { _id: params.id }).single()
 
-  if (!spots) return null
+  if (!spot) return null
 
-  if (spotsError && spotsStatus !== 406) {
-    throw spotsError
+  if (spotError && spotStatus !== 406) {
+    throw spotError
   }
 
   const center = {
-    lat: spots.lat,
-    lng: spots.long,
+    lat: spot.lat,
+    lng: spot.long,
   }
 
   const {
@@ -44,8 +50,8 @@ export default async function SpotPage({ params }: { params: { id: string } }) {
     status: userStatus,
   } = await supabase
     .from("profiles")
-    .select("username")
-    .eq("id", spots.user_id)
+    .select("username, id, avatar_url")
+    .eq("id", spot.user_id)
     .single()
 
   if (!user) return null
@@ -59,33 +65,48 @@ export default async function SpotPage({ params }: { params: { id: string } }) {
       <div className="flex items-center justify-between">
         <div className="flex items-end gap-4">
           <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
-            {spots.name}
+            {spot.name}
           </h1>
-          <Badge variant={spots.is_completed ? "success" : "warning"}>
-            {spots.is_completed ? "Make" : "No make"}
+          <Badge variant={spot.is_completed ? "success" : "warning"}>
+            {spot.is_completed ? "Make" : "No make"}
           </Badge>
         </div>
-        <SpotDropdownMenu spotId={params.id} />
+        {session && session.user.id === spot.user_id && (
+          <SpotDropdownMenu spotId={params.id} />
+        )}
       </div>
-      <div className="mx-auto grid w-full max-w-[400px] gap-4">
+      <div className="mx-auto grid w-full max-w-[400px] gap-6">
         <DynamicMap center={center} zoom={17} />
 
-        <div className="flex flex-col justify-between">
-          <div>
-            <p className="text-2xl font-bold leading-relaxed tracking-tight md:text-xl">
-              {`${user.username} does ${spots.trick} here.`}
-            </p>
-            <p className="text-lg leading-relaxed tracking-tight md:text-xl">
-              {spots.description}
-            </p>
-          </div>
-          <p className="text-md mt-4 text-end text-muted-foreground">
-            {user.username} created this spot.
+        <p className="text-lg leading-relaxed tracking-tight md:text-xl">
+          {spot.description}
+        </p>
+
+        {session ? (
+          <p className="text-md text-end text-muted-foreground">
+            <Link href={`/${user.id}`} className="mt-2 hover:underline">
+              {user.username}
+            </Link>
+            {` does ${spot.trick} here.`}
           </p>
-        </div>
+        ) : (
+          <p className="text-md text-end text-muted-foreground">
+            <Link href={`/${user.id}`} className="mt-2 hover:underline">
+              {user.username}
+            </Link>
+            {` created this spot.`}
+          </p>
+        )}
       </div>
-      <Separator className="my-4" />
-      <Button variant={"success"}>Make 🎉</Button>
+      {session && session.user.id === spot.user_id && (
+        <>
+          <Separator className="my-4" />
+          <SpotCompletedButton
+            isCompleted={spot.is_completed}
+            spotId={spot.id}
+          />
+        </>
+      )}
     </section>
   )
 }
