@@ -31,7 +31,7 @@ export function UserSpotsTabs({ spots }: Props) {
                   <h2 className="text-xl font-bold">{spot.name}</h2>
                 </Link>
                 <div className="mt-2 flex items-start justify-between">
-                  <p>Do {spot.trick}</p>
+                  <p>trick: {spot.trick}</p>
                   <SpotCompletedButton
                     isCompleted={spot.is_completed}
                     spotId={spot.id}
