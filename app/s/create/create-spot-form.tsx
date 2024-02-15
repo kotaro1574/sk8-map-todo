@@ -82,7 +82,7 @@ export default function CreateSpotForm() {
 
       if (error) throw error
 
-      toast({ description: "Commit created!" })
+      toast({ description: "Spot created!" })
       setLoading(false)
       router.push("/")
       startTransition(() => {
