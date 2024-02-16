@@ -19,7 +19,7 @@ export function SpotTabs({ center }: { center: { lat: number; lng: number } }) {
         <TabsTrigger value="map">Map</TabsTrigger>
       </TabsList>
       <TabsContent value="image">
-        <SpotImage />
+        <SpotImage filePath={null} />
       </TabsContent>
       <TabsContent value="map">
         <DynamicMap center={center} zoom={17} />
