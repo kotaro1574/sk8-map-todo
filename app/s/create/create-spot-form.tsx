@@ -80,6 +80,7 @@ export default function CreateSpotForm() {
         description: values.description,
         location: `POINT(${values.location.lng} ${values.location.lat})`,
         is_public: values.isPublic,
+        file_path: values.filePath ?? "",
       })
 
       if (error) throw error

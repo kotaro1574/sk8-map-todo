@@ -68,7 +68,7 @@ export default async function IndexPage() {
             <Link key={spot.id} href={`/s/${spot.id}`}>
               <Card>
                 <CardContent className="p-4">
-                  <SpotImage filePath={null} />
+                  <SpotImage filePath={spot.file_path} />
                   <h2 className="mt-4 text-xl font-bold">{spot.name}</h2>
                 </CardContent>
               </Card>

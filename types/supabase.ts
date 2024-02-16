@@ -48,6 +48,7 @@ export type Database = {
         Row: {
           created_at: string
           description: string
+          file_path: string
           id: string
           is_completed: boolean
           is_public: boolean
@@ -60,6 +61,7 @@ export type Database = {
         Insert: {
           created_at?: string
           description: string
+          file_path?: string
           id?: string
           is_completed?: boolean
           is_public?: boolean
@@ -72,6 +74,7 @@ export type Database = {
         Update: {
           created_at?: string
           description?: string
+          file_path?: string
           id?: string
           is_completed?: boolean
           is_public?: boolean
