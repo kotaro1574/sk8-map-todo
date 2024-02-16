@@ -5,7 +5,6 @@ import dynamic from "next/dynamic"
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
-import { Loader2 } from "lucide-react"
 import { Controller, useForm } from "react-hook-form"
 import { z } from "zod"
 

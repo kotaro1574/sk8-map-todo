@@ -1,4 +1,4 @@
-"use client"
+import { SpotImageUploader } from "@/components/spot-image-uploader"
 
 import CreateSpotForm from "./create-spot-form"
 
@@ -10,6 +10,7 @@ export default function SpotCreatePage() {
           Create Spot 📍
         </h1>
         <div className="w-full">
+          <SpotImageUploader />
           <CreateSpotForm />
         </div>
       </div>
