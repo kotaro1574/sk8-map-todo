@@ -33,6 +33,7 @@ export default async function IndexPage() {
     .from("spots")
     .select("*")
     .eq("is_public", true)
+    .order("created_at", { ascending: false })
 
   if (!data) return null
 
