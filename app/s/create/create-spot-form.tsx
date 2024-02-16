@@ -105,7 +105,7 @@ export default function CreateSpotForm() {
           name="filePath"
           render={({ field: { onChange, value } }) => (
             <FormItem>
-              <FormLabel>color</FormLabel>
+              <FormLabel>spot image</FormLabel>
               <SpotImageUploader filePath={value} onChange={onChange} />
             </FormItem>
           )}
