@@ -1,5 +1,3 @@
-"use client"
-
 import { ChangeEventHandler, useState } from "react"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 
@@ -8,10 +6,15 @@ import { Database } from "@/types/supabase"
 import { SpotImage } from "./spot-image"
 import { buttonVariants } from "./ui/button"
 
-export function SpotImageUploader() {
+export function SpotImageUploader({
+  filePath,
+  onChange,
+}: {
+  filePath: string | null
+  onChange: (filePath: string | null) => void
+}) {
   const supabase = createClientComponentClient<Database>()
   const [uploading, setUploading] = useState(false)
-  const [filePath, setFilePath] = useState<string | null>(null)
 
   const onUpload: ChangeEventHandler<HTMLInputElement> = async (event) => {
     setUploading(true)
@@ -32,9 +35,7 @@ export function SpotImageUploader() {
       throw error
     }
 
-    const { data } = supabase.storage.from("spots").getPublicUrl(filePath)
-
-    setFilePath(data.publicUrl)
+    onChange(filePath)
 
     setUploading(false)
   }
@@ -42,12 +43,12 @@ export function SpotImageUploader() {
   return (
     <div className="relative">
       <div className="w-[300px]">
-        <SpotImage src={filePath} />
+        <SpotImage filePath={filePath} />
         <label
           className={`${buttonVariants({
             variant: "default",
             size: "default",
-          })} mt-2 block`}
+          })} mt-2 block w-full`}
           htmlFor="single"
         >
           {filePath ? "Change spot image" : "Upload spot image"}

@@ -23,6 +23,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
 import { MapSkeleton } from "@/components/map-skeleton"
+import { SpotImageUploader } from "@/components/spot-image-uploader"
 
 const DynamicLocationSelectMap = dynamic(
   () => import("@/components/location-select-map"),
@@ -43,6 +44,7 @@ const formSchema = z.object({
     })
     .nullable(),
   isPublic: z.boolean(),
+  filePath: z.string().nullable(),
 })
 
 export default function CreateSpotForm() {
@@ -59,6 +61,7 @@ export default function CreateSpotForm() {
       description: "",
       location: null,
       isPublic: false,
+      filePath: null,
     },
   })
 
@@ -97,6 +100,16 @@ export default function CreateSpotForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <Controller
+          control={form.control}
+          name="filePath"
+          render={({ field: { onChange, value } }) => (
+            <FormItem>
+              <FormLabel>color</FormLabel>
+              <SpotImageUploader filePath={value} onChange={onChange} />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="isPublic"
