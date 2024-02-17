@@ -30,7 +30,7 @@ export function UserSpotsTabs({ spots, session }: Props) {
           .map((spot) => (
             <Card key={spot.id}>
               <CardContent className="p-4">
-                <SpotImage filePath={null} />
+                <SpotImage filePath={spot.file_path} />
                 <Link href={`/s/${spot.id}`} className="hover:underline">
                   <h2 className="mt-4 text-xl font-bold">{spot.name}</h2>
                 </Link>
@@ -56,7 +56,7 @@ export function UserSpotsTabs({ spots, session }: Props) {
           .map((spot) => (
             <Card key={spot.id}>
               <CardContent className="p-4">
-                <SpotImage filePath={null} />
+                <SpotImage filePath={spot.file_path} />
                 <Link href={`/s/${spot.id}`} className="hover:underline">
                   <h2 className="mt-4 text-xl font-bold">{spot.name}</h2>
                 </Link>
