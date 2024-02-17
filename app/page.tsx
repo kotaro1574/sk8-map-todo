@@ -1,12 +1,10 @@
 import dynamic from "next/dynamic"
 import { cookies } from "next/headers"
-import Image from "next/image"
 import Link from "next/link"
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 
 import { Database } from "@/types/supabase"
 import { siteConfig } from "@/config/site"
-import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { buttonVariants } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
