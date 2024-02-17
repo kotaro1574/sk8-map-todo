@@ -6,7 +6,6 @@ export async function POST(req: NextRequest) {
   const cookieStore = cookies()
   const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
 
-  // Check if we have a session
   const {
     data: { session },
   } = await supabase.auth.getSession()
