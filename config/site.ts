@@ -1,7 +1,7 @@
 export type SiteConfig = typeof siteConfig
 
 export const siteConfig = {
-  name: "Spot Todo",
+  name: "sk8 map todo",
   description:
     "Register now for the spots you plan to shoot with your skateboard! 🛹 📹 ",
   mainNav: [
