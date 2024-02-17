@@ -76,7 +76,7 @@ export default async function SpotPage({ params }: { params: { id: string } }) {
         )}
       </div>
       <div className="mx-auto grid w-full max-w-[400px] gap-6">
-        <SpotTabs center={center} />
+        <SpotTabs center={center} filePath={spot.file_path} />
 
         <p className="text-lg leading-relaxed tracking-tight md:text-xl">
           {spot.description}

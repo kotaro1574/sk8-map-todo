@@ -11,15 +11,21 @@ const DynamicMap = dynamic(() => import("@/components/map"), {
   ssr: false,
 })
 
-export function SpotTabs({ center }: { center: { lat: number; lng: number } }) {
+export function SpotTabs({
+  filePath,
+  center,
+}: {
+  filePath: string
+  center: { lat: number; lng: number }
+}) {
   return (
-    <Tabs defaultValue="image">
+    <Tabs defaultValue={!filePath ? "map" : "image"}>
       <TabsList>
         <TabsTrigger value="image">Image</TabsTrigger>
         <TabsTrigger value="map">Map</TabsTrigger>
       </TabsList>
       <TabsContent value="image">
-        <SpotImage filePath={null} />
+        <SpotImage filePath={filePath} />
       </TabsContent>
       <TabsContent value="map">
         <DynamicMap center={center} zoom={17} />
