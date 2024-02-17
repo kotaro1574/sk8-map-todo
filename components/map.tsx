@@ -7,7 +7,6 @@ import "leaflet/dist/leaflet.css"
 import { useState } from "react"
 import { MapContainer, TileLayer } from "react-leaflet"
 
-import { Spot } from "@/types/spot"
 import { Database } from "@/types/supabase"
 
 import { SpotMarkers } from "./spot-markers"

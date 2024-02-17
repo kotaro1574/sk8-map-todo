@@ -5,7 +5,6 @@ import dynamic from "next/dynamic"
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
-import { Loader2 } from "lucide-react"
 import { Controller, useForm } from "react-hook-form"
 import { z } from "zod"
 
@@ -24,6 +23,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
 import { MapSkeleton } from "@/components/map-skeleton"
+import { SpotImageUploader } from "@/components/spot-image-uploader"
 
 const DynamicLocationSelectMap = dynamic(
   () => import("@/components/location-select-map"),
@@ -44,6 +44,7 @@ const formSchema = z.object({
     })
     .nullable(),
   isPublic: z.boolean(),
+  filePath: z.string().nullable(),
 })
 
 export default function CreateSpotForm() {
@@ -60,6 +61,7 @@ export default function CreateSpotForm() {
       description: "",
       location: null,
       isPublic: false,
+      filePath: null,
     },
   })
 
@@ -78,6 +80,7 @@ export default function CreateSpotForm() {
         description: values.description,
         location: `POINT(${values.location.lng} ${values.location.lat})`,
         is_public: values.isPublic,
+        file_path: values.filePath ?? "",
       })
 
       if (error) throw error
@@ -98,6 +101,16 @@ export default function CreateSpotForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <Controller
+          control={form.control}
+          name="filePath"
+          render={({ field: { onChange, value } }) => (
+            <FormItem>
+              <FormLabel>spot image</FormLabel>
+              <SpotImageUploader filePath={value} onChange={onChange} />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="isPublic"

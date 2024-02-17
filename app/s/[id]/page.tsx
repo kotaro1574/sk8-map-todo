@@ -4,13 +4,13 @@ import Link from "next/link"
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 
 import { Database } from "@/types/supabase"
-import { Avatar } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { MapSkeleton } from "@/components/map-skeleton"
 import { SpotCompletedButton } from "@/components/spot-completed-button"
 
 import { SpotDropdownMenu } from "./spot-dropdown-menu"
+import { SpotTabs } from "./spot-tabs"
 
 const DynamicMap = dynamic(() => import("@/components/map"), {
   loading: () => <MapSkeleton>📹 📹 📹</MapSkeleton>,
@@ -76,7 +76,7 @@ export default async function SpotPage({ params }: { params: { id: string } }) {
         )}
       </div>
       <div className="mx-auto grid w-full max-w-[400px] gap-6">
-        <DynamicMap center={center} zoom={17} />
+        <SpotTabs center={center} filePath={spot.file_path} />
 
         <p className="text-lg leading-relaxed tracking-tight md:text-xl">
           {spot.description}

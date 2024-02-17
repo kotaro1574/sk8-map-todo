@@ -10,6 +10,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Icons } from "@/components/icons"
 import { MapSkeleton } from "@/components/map-skeleton"
+import { SpotImage } from "@/components/spot-image"
 
 const DynamicMap = dynamic(() => import("@/components/map"), {
   loading: () => <MapSkeleton>🛹 🛹 🛹</MapSkeleton>,
@@ -30,6 +31,7 @@ export default async function IndexPage() {
     .from("spots")
     .select("*")
     .eq("is_public", true)
+    .order("created_at", { ascending: false })
 
   if (!data) return null
 
@@ -60,13 +62,13 @@ export default async function IndexPage() {
           )}
         </div>
         <Separator className="my-4" />
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
           {data.map((spot) => (
             <Link key={spot.id} href={`/s/${spot.id}`}>
               <Card>
                 <CardContent className="p-4">
-                  <h2 className="text-xl font-bold">{spot.name}</h2>
-                  <p className="mt-2">{spot.description}</p>
+                  <SpotImage filePath={spot.file_path} />
+                  <h2 className="mt-4 text-xl font-bold">{spot.name}</h2>
                 </CardContent>
               </Card>
             </Link>

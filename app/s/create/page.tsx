@@ -1,4 +1,4 @@
-"use client"
+import { SpotImageUploader } from "@/components/spot-image-uploader"
 
 import CreateSpotForm from "./create-spot-form"
 

@@ -19,7 +19,7 @@ export function SiteHeader({
     <header className="sticky top-0 z-[1200] w-full border-b bg-background">
       <div className="container flex h-16 items-center justify-between space-x-4 px-4 sm:space-x-0 md:px-8">
         <MainNav items={siteConfig.mainNav} />
-        <nav className="hidden items-center space-x-1 sm:flex">
+        <nav className="flex items-center space-x-1">
           {session ? (
             <Link
               className={buttonVariants({ variant: "ghost", size: "icon" })}

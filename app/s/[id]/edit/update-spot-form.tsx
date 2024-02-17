@@ -23,6 +23,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
 import { MapSkeleton } from "@/components/map-skeleton"
+import { SpotImageUploader } from "@/components/spot-image-uploader"
 
 const DynamicLocationSelectMap = dynamic(
   () => import("@/components/location-select-map"),
@@ -43,6 +44,7 @@ const formSchema = z.object({
     })
     .nullable(),
   isPublic: z.boolean(),
+  filePath: z.string(),
 })
 
 type Props = {
@@ -66,6 +68,7 @@ export default function UpdateSpotForm({ spot }: Props) {
         lng: spot.long,
       },
       isPublic: spot.is_public,
+      filePath: spot.file_path,
     },
   })
 
@@ -87,6 +90,7 @@ export default function UpdateSpotForm({ spot }: Props) {
           location: `POINT(${values.location.lng} ${values.location.lat})`,
           is_public: values.isPublic,
           updated_at: new Date().toISOString(),
+          file_path: values.filePath,
         })
         .eq("id", spot.id)
 
@@ -107,6 +111,16 @@ export default function UpdateSpotForm({ spot }: Props) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <Controller
+          control={form.control}
+          name="filePath"
+          render={({ field: { onChange, value } }) => (
+            <FormItem>
+              <FormLabel>spot image</FormLabel>
+              <SpotImageUploader filePath={value} onChange={onChange} />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="isPublic"
