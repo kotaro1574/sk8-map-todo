@@ -9,9 +9,11 @@ import { Database } from "@/types/supabase"
 
 import MarkerIcon from "../node_modules/leaflet/dist/images/marker-icon.png"
 import MarkerShadow from "../node_modules/leaflet/dist/images/marker-shadow.png"
+import { SpotImage } from "./spot-image"
 
 type SpotInView = {
   id: string
+  file_path: string
   name: string
   description: string
   lat: number
@@ -69,7 +71,10 @@ export function SpotMarkers({
           position={{ lat: spot.lat, lng: spot.long }}
         >
           <Popup>
-            {spot.name} <br /> {spot.description}
+            <div className="w-[150px]">
+              <SpotImage filePath={spot.file_path} />
+              <p>{spot.name}</p>
+            </div>
           </Popup>
         </Marker>
       ))}
