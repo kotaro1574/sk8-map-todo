@@ -25,9 +25,9 @@ export function SpotImage({ filePath }: { filePath: string | null }) {
       <Image
         src={data.publicUrl}
         alt="Spot image"
-        layout="fill"
-        objectFit="cover"
-        className="rounded-md"
+        fill
+        sizes="100%"
+        className="rounded-md object-cover"
       />
     </AspectRatio>
   )
