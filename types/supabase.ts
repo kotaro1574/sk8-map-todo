@@ -132,6 +132,7 @@ export type Database = {
         }
         Returns: {
           id: string
+          file_path: string
           name: string
           trick: string
           description: string
