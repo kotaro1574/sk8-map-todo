@@ -3,6 +3,7 @@ import L from "leaflet"
 
 import "leaflet/dist/leaflet.css"
 import { useEffect, useState } from "react"
+import Link from "next/link"
 import { Marker, Popup, useMap } from "react-leaflet"
 
 import { Database } from "@/types/supabase"
@@ -71,10 +72,12 @@ export function SpotMarkers({
           position={{ lat: spot.lat, lng: spot.long }}
         >
           <Popup>
-            <div className="w-[150px]">
-              <SpotImage filePath={spot.file_path} />
-              <p>{spot.name}</p>
-            </div>
+            <Link href={`/s/${spot.id}`}>
+              <div className="w-[150px]">
+                <SpotImage filePath={spot.file_path} />
+                <p>{spot.name}</p>
+              </div>
+            </Link>
           </Popup>
         </Marker>
       ))}
