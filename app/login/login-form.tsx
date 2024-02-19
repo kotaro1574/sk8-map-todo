@@ -17,14 +17,20 @@ import {
   FormLabel,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { useToast } from "@/components/ui/use-toast"
 
 const formSchema = z.object({
   email: z.string().email(),
 })
 
+const errorSchema = z.object({
+  message: z.string(),
+})
+
 export default function LoginForm() {
   const supabase = createClientComponentClient<Database>()
   const [loading, setLoading] = useState(false)
+  const { toast } = useToast()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -45,8 +51,14 @@ export default function LoginForm() {
       if (error) {
         throw error
       }
+
+      toast({ description: "Check your email for the magic link 📩" })
     } catch (error) {
-      console.log(error)
+      const parseError = errorSchema.parse(error)
+      toast({
+        variant: "destructive",
+        description: parseError.message,
+      })
     } finally {
       setLoading(false)
     }
