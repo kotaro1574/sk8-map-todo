@@ -1,5 +1,3 @@
-import { SpotImageUploader } from "@/components/spot-image-uploader"
-
 import CreateSpotForm from "./create-spot-form"
 
 export default function SpotCreatePage() {

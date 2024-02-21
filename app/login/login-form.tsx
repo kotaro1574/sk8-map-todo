@@ -27,7 +27,7 @@ const errorSchema = z.object({
   message: z.string(),
 })
 
-export default function LoginForm() {
+export function LoginForm() {
   const supabase = createClientComponentClient<Database>()
   const [loading, setLoading] = useState(false)
   const { toast } = useToast()

@@ -1,6 +1,6 @@
 import { siteConfig } from "@/config/site"
 
-import LoginForm from "./login-form"
+import { LoginForm } from "./login-form"
 
 export default function IndexPage() {
   return (
