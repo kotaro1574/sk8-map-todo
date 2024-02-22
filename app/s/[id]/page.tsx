@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic"
 import { cookies } from "next/headers"
 import Link from "next/link"
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
@@ -6,16 +5,10 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 import { Database } from "@/types/supabase"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { MapSkeleton } from "@/components/map-skeleton"
 import { SpotCompletedButton } from "@/components/spot-completed-button"
 
 import { SpotDropdownMenu } from "./spot-dropdown-menu"
 import { SpotTabs } from "./spot-tabs"
-
-const DynamicMap = dynamic(() => import("@/components/map"), {
-  loading: () => <MapSkeleton>📹 📹 📹</MapSkeleton>,
-  ssr: false,
-})
 
 export default async function SpotPage({ params }: { params: { id: string } }) {
   const cookieStore = cookies()
