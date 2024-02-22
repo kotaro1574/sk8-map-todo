@@ -3,10 +3,7 @@
 import { startTransition, useState } from "react"
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
-import {
-  User,
-  createClientComponentClient,
-} from "@supabase/auth-helpers-nextjs"
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
@@ -15,7 +12,6 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -28,18 +24,16 @@ import AvatarUploader from "./avatar-uploader"
 const formSchema = z.object({
   username: z.string(),
   avatar_url: z.string(),
-  email: z.string().email(),
 })
 
 type Props = {
-  user: User
   profile: Pick<
     Database["public"]["Tables"]["profiles"]["Row"],
-    "username" | "avatar_url"
+    "username" | "avatar_url" | "id"
   >
 }
 
-export default function AccountForm({ profile, user }: Props) {
+export default function AccountForm({ profile }: Props) {
   const supabase = createClientComponentClient<Database>()
   const router = useRouter()
   const { toast } = useToast()
@@ -48,7 +42,6 @@ export default function AccountForm({ profile, user }: Props) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: user.email,
       username: profile.username || "",
       avatar_url: profile.avatar_url || "",
     },
@@ -62,7 +55,7 @@ export default function AccountForm({ profile, user }: Props) {
       setLoading(true)
 
       const { error } = await supabase.from("profiles").upsert({
-        id: user.id,
+        id: profile.id,
         username,
         avatar_url,
         updated_at: new Date().toISOString(),
@@ -91,7 +84,7 @@ export default function AccountForm({ profile, user }: Props) {
               <FormLabel htmlFor="avatar_url">Avatar</FormLabel>
               <FormControl>
                 <AvatarUploader
-                  uid={user.id}
+                  uid={profile.id}
                   url={field.value}
                   size={150}
                   onUpload={(url) => {
@@ -100,23 +93,6 @@ export default function AccountForm({ profile, user }: Props) {
                   }}
                 />
               </FormControl>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor="email">Email</FormLabel>
-              <FormControl>
-                <Input disabled {...field} />
-              </FormControl>
-              {form.formState.errors.email && (
-                <FormDescription>
-                  {form.formState.errors.email.message}
-                </FormDescription>
-              )}
             </FormItem>
           )}
         />

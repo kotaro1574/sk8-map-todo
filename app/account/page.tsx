@@ -22,7 +22,7 @@ export default async function AccountPage() {
 
   const { data, error, status } = await supabase
     .from("profiles")
-    .select("username, avatar_url")
+    .select("username, avatar_url, id")
     .eq("id", user.id)
     .single()
 
@@ -37,7 +37,7 @@ export default async function AccountPage() {
       <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
         Account
       </h1>
-      <AccountForm user={user} profile={data} />
+      <AccountForm profile={data} />
 
       <form action="/auth/signout" method="post">
         <Button variant={"outline"} className="block w-full" type="submit">
