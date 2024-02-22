@@ -3,6 +3,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 
 import { Database } from "@/types/supabase"
 import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
 
 import AccountForm from "./account-form"
 
@@ -39,9 +40,11 @@ export default async function AccountPage() {
       </h1>
       <AccountForm profile={data} />
 
+      <Separator className="" />
+
       <form action="/auth/signout" method="post">
-        <Button variant={"outline"} className="block w-full" type="submit">
-          Sign out
+        <Button variant={"destructive"} className="block w-full" type="submit">
+          Logout
         </Button>
       </form>
     </section>
