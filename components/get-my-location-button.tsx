@@ -4,8 +4,10 @@ import { Button } from "./ui/button"
 
 export function GetMyLocationButton({
   onClick,
+  className,
 }: {
   onClick: ({ lat, lng }: { lat: number; lng: number }) => void
+  className?: string
 }) {
   const [loading, setLoading] = useState(false)
 
@@ -25,7 +27,7 @@ export function GetMyLocationButton({
   }
 
   return (
-    <Button onClick={getMyLocation} disabled={loading}>
+    <Button onClick={getMyLocation} disabled={loading} className={className}>
       {loading ? "Loading..." : "Get my location"}
     </Button>
   )

@@ -12,23 +12,28 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useToast } from "@/components/ui/use-toast"
 import { GetMyLocationButton } from "@/components/get-my-location-button"
+import LocationSelectMap from "@/components/location-select-map"
 
 import AvatarUploader from "./avatar-uploader"
 
 const formSchema = z.object({
   username: z.string(),
   avatar_url: z.string(),
-  center: z.object({
-    lat: z.number(),
-    lng: z.number(),
-  }),
+  center: z
+    .object({
+      lat: z.number(),
+      lng: z.number(),
+    })
+    .nullable(),
 })
 
 type Props = {
@@ -49,10 +54,13 @@ export default function AccountForm({ profile }: Props) {
     defaultValues: {
       username: profile.username || "",
       avatar_url: profile.avatar_url || "",
-      center: {
-        lat: profile.lat || 0,
-        lng: profile.lng || 0,
-      },
+      center:
+        profile.lat && profile.lng
+          ? {
+              lat: profile.lat,
+              lng: profile.lng,
+            }
+          : null,
     },
   })
 
@@ -122,10 +130,22 @@ export default function AccountForm({ profile }: Props) {
         <Controller
           control={form.control}
           name="center"
-          render={({ field: { onChange } }) => (
+          render={({ field: { value, onChange } }) => (
             <FormItem>
               <FormLabel htmlFor="center">Center</FormLabel>
-              <GetMyLocationButton onClick={onChange} />
+              <FormControl>
+                <div className="space-y-4">
+                  <LocationSelectMap value={value} onChange={onChange} />
+                  <GetMyLocationButton
+                    onClick={onChange}
+                    className="block w-full"
+                  />
+                </div>
+              </FormControl>
+              <FormDescription>
+                Determine the center of the Map that will be displayed in the
+                app.
+              </FormDescription>
             </FormItem>
           )}
         />
