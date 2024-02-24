@@ -24,12 +24,16 @@ import AvatarUploader from "./avatar-uploader"
 const formSchema = z.object({
   username: z.string(),
   avatar_url: z.string(),
+  center: z.object({
+    lat: z.number(),
+    lng: z.number(),
+  }),
 })
 
 type Props = {
   profile: Pick<
     Database["public"]["Tables"]["profiles"]["Row"],
-    "username" | "avatar_url" | "id"
+    "username" | "avatar_url" | "id" | "lat" | "lng"
   >
 }
 
@@ -44,6 +48,10 @@ export default function AccountForm({ profile }: Props) {
     defaultValues: {
       username: profile.username || "",
       avatar_url: profile.avatar_url || "",
+      center: {
+        lat: profile.lat || 0,
+        lng: profile.lng || 0,
+      },
     },
   })
 
@@ -108,6 +116,7 @@ export default function AccountForm({ profile }: Props) {
             </FormItem>
           )}
         />
+
         <Button type="submit" className="block w-full" disabled={loading}>
           {loading ? "Loading ..." : "Update"}
         </Button>
