@@ -4,7 +4,7 @@ import { startTransition, useState } from "react"
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { z } from "zod"
 
 import { Database } from "@/types/supabase"
@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/use-toast"
+import { GetMyLocationButton } from "@/components/get-my-location-button"
 
 import AvatarUploader from "./avatar-uploader"
 
@@ -54,6 +55,8 @@ export default function AccountForm({ profile }: Props) {
       },
     },
   })
+
+  console.log(form.watch("center"))
 
   const onSubmit = async ({
     username,
@@ -113,6 +116,16 @@ export default function AccountForm({ profile }: Props) {
               <FormControl>
                 <Input {...field} />
               </FormControl>
+            </FormItem>
+          )}
+        />
+        <Controller
+          control={form.control}
+          name="center"
+          render={({ field: { onChange } }) => (
+            <FormItem>
+              <FormLabel htmlFor="center">Center</FormLabel>
+              <GetMyLocationButton onClick={onChange} />
             </FormItem>
           )}
         />
