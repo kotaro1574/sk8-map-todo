@@ -47,7 +47,11 @@ const formSchema = z.object({
   filePath: z.string().nullable(),
 })
 
-export default function CreateSpotForm() {
+export default function CreateSpotForm({
+  center,
+}: {
+  center: { lat: number; lng: number }
+}) {
   const supabase = createClientComponentClient<Database>()
   const router = useRouter()
   const { toast } = useToast()
@@ -182,7 +186,11 @@ export default function CreateSpotForm() {
           render={({ field: { onChange, value } }) => (
             <FormItem>
               <FormLabel>location</FormLabel>
-              <DynamicLocationSelectMap onChange={onChange} value={value} />
+              <DynamicLocationSelectMap
+                onChange={onChange}
+                value={value}
+                center={center}
+              />
             </FormItem>
           )}
         />
