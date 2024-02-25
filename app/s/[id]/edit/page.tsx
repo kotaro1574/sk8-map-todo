@@ -2,6 +2,7 @@ import { cookies } from "next/headers"
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 
 import { Database } from "@/types/supabase"
+import { siteConfig } from "@/config/site"
 
 import UpdateSpotForm from "./update-spot-form"
 
@@ -25,6 +26,21 @@ export default async function SpotEditPage({
     throw error
   }
 
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+
+  const { data: user } = await supabase
+    .from("profiles")
+    .select("lat, lng")
+    .eq("id", session?.user.id ?? "")
+    .single()
+
+  const center =
+    user && user.lat && user.lng
+      ? { lat: user.lat, lng: user.lng }
+      : siteConfig.defaultMapCenter
+
   return (
     <section className="grid items-center gap-6">
       <div className="flex max-w-[980px] flex-col items-start gap-6">
@@ -32,7 +48,7 @@ export default async function SpotEditPage({
           Edit Spot
         </h1>
         <div className="w-full">
-          <UpdateSpotForm spot={data} />
+          <UpdateSpotForm spot={data} center={center} />
         </div>
       </div>
     </section>

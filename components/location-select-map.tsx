@@ -20,9 +20,13 @@ type Props = {
     lat: number
     lng: number
   } | null
+  center: {
+    lat: number
+    lng: number
+  } | null
 }
 
-export default function LocationSelectMap({ onChange, value }: Props) {
+export default function LocationSelectMap({ onChange, value, center }: Props) {
   const SelectedMarker = () => {
     const map = useMapEvents({
       click(e) {
@@ -62,7 +66,7 @@ export default function LocationSelectMap({ onChange, value }: Props) {
             height: "400px",
             width: "100%",
           }}
-          center={value || siteConfig.defaultMapCenter}
+          center={center || value || siteConfig.defaultMapCenter}
           zoom={13}
         >
           <TileLayer

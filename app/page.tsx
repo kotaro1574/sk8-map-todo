@@ -27,25 +27,36 @@ export default async function IndexPage() {
     data: { session },
   } = await supabase.auth.getSession()
 
-  const { data, error, status } = await supabase
+  const {
+    data: spots,
+    error: spotsError,
+    status: spotsStatus,
+  } = await supabase
     .from("spots")
     .select("*")
     .eq("is_public", true)
     .order("created_at", { ascending: false })
 
-  if (!data) return null
+  if (!spots) return null
 
-  if (error && status !== 406) {
-    throw error
+  if (spotsError && spotsStatus !== 406) {
+    throw spotsError
   }
+
+  const { data: user } = await supabase
+    .from("profiles")
+    .select("lat, lng")
+    .eq("id", session?.user.id ?? "")
+    .single()
+
+  const center =
+    user && user.lat && user.lng
+      ? { lat: user.lat, lng: user.lng }
+      : siteConfig.defaultMapCenter
 
   return (
     <section className="grid items-center gap-6">
-      <DynamicMap
-        center={siteConfig.defaultMapCenter}
-        isGetMyLocation
-        zoom={13}
-      />
+      <DynamicMap center={center} isGetMyLocation zoom={13} />
       <div>
         <div className="mt-4 flex items-center justify-between">
           <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
@@ -63,7 +74,7 @@ export default async function IndexPage() {
         </div>
         <Separator className="my-4" />
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-          {data.map((spot) => (
+          {spots.map((spot) => (
             <Link key={spot.id} href={`/s/${spot.id}`}>
               <Card>
                 <CardContent className="p-4">

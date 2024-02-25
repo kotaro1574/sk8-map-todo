@@ -49,9 +49,10 @@ const formSchema = z.object({
 
 type Props = {
   spot: Database["public"]["Functions"]["spot"]["Returns"][0]
+  center: { lat: number; lng: number }
 }
 
-export default function UpdateSpotForm({ spot }: Props) {
+export default function UpdateSpotForm({ spot, center }: Props) {
   const supabase = createClientComponentClient<Database>()
   const router = useRouter()
   const { toast } = useToast()
@@ -192,7 +193,11 @@ export default function UpdateSpotForm({ spot }: Props) {
           render={({ field: { onChange, value } }) => (
             <FormItem>
               <FormLabel>location</FormLabel>
-              <DynamicLocationSelectMap onChange={onChange} value={value} />
+              <DynamicLocationSelectMap
+                onChange={onChange}
+                value={value}
+                center={null}
+              />
             </FormItem>
           )}
         />
