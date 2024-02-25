@@ -23,7 +23,7 @@ type Props = {
   center: {
     lat: number
     lng: number
-  }
+  } | null
 }
 
 export default function LocationSelectMap({ onChange, value, center }: Props) {
@@ -66,7 +66,7 @@ export default function LocationSelectMap({ onChange, value, center }: Props) {
             height: "400px",
             width: "100%",
           }}
-          center={center}
+          center={center || value || siteConfig.defaultMapCenter}
           zoom={13}
         >
           <TileLayer

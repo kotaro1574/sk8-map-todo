@@ -196,7 +196,7 @@ export default function UpdateSpotForm({ spot, center }: Props) {
               <DynamicLocationSelectMap
                 onChange={onChange}
                 value={value}
-                center={center}
+                center={null}
               />
             </FormItem>
           )}
