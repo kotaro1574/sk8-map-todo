@@ -64,11 +64,10 @@ export default function AccountForm({ profile }: Props) {
     },
   })
 
-  console.log(form.watch("center"))
-
   const onSubmit = async ({
     username,
     avatar_url,
+    center,
   }: z.infer<typeof formSchema>) => {
     try {
       setLoading(true)
@@ -77,11 +76,14 @@ export default function AccountForm({ profile }: Props) {
         id: profile.id,
         username,
         avatar_url,
+        lat: center?.lat,
+        lng: center?.lng,
         updated_at: new Date().toISOString(),
       })
       if (error) throw error
       toast({ description: "Profile updated!" })
       setLoading(false)
+      router.push(`/${profile.id}`)
       startTransition(() => {
         router.refresh()
       })
