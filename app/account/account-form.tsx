@@ -137,7 +137,11 @@ export default function AccountForm({ profile }: Props) {
               <FormLabel htmlFor="center">Center</FormLabel>
               <FormControl>
                 <div className="space-y-4">
-                  <LocationSelectMap value={value} onChange={onChange} />
+                  <LocationSelectMap
+                    value={value}
+                    onChange={onChange}
+                    center={null}
+                  />
                   <GetMyLocationButton
                     onClick={onChange}
                     className="block w-full"
