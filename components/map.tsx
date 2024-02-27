@@ -13,35 +13,40 @@ import { GetMyLocationButton } from "./get-my-location-button"
 import { SpotMarkers } from "./spot-markers"
 
 type Props = {
+  height?: string
   center: L.LatLngExpression
   isGetMyLocation?: boolean
   zoom: number
 }
 
-export default function Map({ center, isGetMyLocation = false, zoom }: Props) {
+export default function Map({
+  center,
+  isGetMyLocation = false,
+  zoom,
+  height = "400px",
+}: Props) {
   const supabase = createClientComponentClient<Database>()
   const [coord, setCoord] = useState<L.LatLngExpression>(center)
 
   return (
     <div className="text-center">
-      <div className="overflow-hidden rounded-sm">
-        <MapContainer
-          style={{
-            height: "400px",
-            width: "100%",
-          }}
-          center={coord}
-          key={`${coord}`}
-          zoom={zoom}
-        >
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
+      <MapContainer
+        style={{
+          height,
+          width: "100%",
+        }}
+        center={coord}
+        key={`${coord}`}
+        zoom={zoom}
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
 
-          <SpotMarkers supabase={supabase} />
-        </MapContainer>
-      </div>
+        <SpotMarkers supabase={supabase} />
+      </MapContainer>
+
       {isGetMyLocation && (
         <GetMyLocationButton onClick={setCoord} className="mt-4" />
       )}
