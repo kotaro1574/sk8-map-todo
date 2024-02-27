@@ -9,66 +9,46 @@ import { MapContainer, TileLayer } from "react-leaflet"
 
 import { Database } from "@/types/supabase"
 
+import { GetMyLocationButton } from "./get-my-location-button"
 import { SpotMarkers } from "./spot-markers"
-import { Button } from "./ui/button"
-
-type SpotInView = {
-  id: string
-  name: string
-  description: string
-  lat: number
-  long: number
-}
 
 type Props = {
+  height?: string
   center: L.LatLngExpression
   isGetMyLocation?: boolean
   zoom: number
 }
 
-export default function Map({ center, isGetMyLocation = false, zoom }: Props) {
+export default function Map({
+  center,
+  isGetMyLocation = false,
+  zoom,
+  height = "400px",
+}: Props) {
   const supabase = createClientComponentClient<Database>()
   const [coord, setCoord] = useState<L.LatLngExpression>(center)
-  const [loading, setLoading] = useState(false)
-
-  const getMyLocation = () => {
-    if (navigator.geolocation) {
-      setLoading(true)
-      navigator.geolocation.getCurrentPosition((position) => {
-        setLoading(false)
-        setCoord([position.coords.latitude, position.coords.longitude])
-      })
-    } else {
-      console.log("Geolocation is not supported by this browser.")
-    }
-  }
 
   return (
-    <div>
-      <div className="overflow-hidden rounded-sm">
-        <MapContainer
-          style={{
-            height: "400px",
-            width: "100%",
-          }}
-          center={coord}
-          key={`${coord}`}
-          zoom={zoom}
-        >
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
+    <div className="text-center">
+      <MapContainer
+        style={{
+          height,
+          width: "100%",
+        }}
+        center={coord}
+        key={`${coord}`}
+        zoom={zoom}
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
 
-          <SpotMarkers supabase={supabase} />
-        </MapContainer>
-      </div>
+        <SpotMarkers supabase={supabase} />
+      </MapContainer>
+
       {isGetMyLocation && (
-        <div className="mt-4 text-center">
-          <Button onClick={getMyLocation}>
-            {loading ? "Loading..." : "Get my location"}
-          </Button>
-        </div>
+        <GetMyLocationButton onClick={setCoord} className="mt-4" />
       )}
     </div>
   )
