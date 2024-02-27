@@ -68,9 +68,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
                   session={session}
                   avatar_url={data?.avatar_url ?? null}
                 />
-                <div className="container max-w-[980px] flex-1 px-4 pb-8 pt-6 md:px-8 md:py-10">
-                  {children}
-                </div>
+                <div className="flex-1">{children}</div>
               </div>
               <TailwindIndicator />
             </ToasterProvider>
