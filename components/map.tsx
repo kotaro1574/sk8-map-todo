@@ -9,16 +9,8 @@ import { MapContainer, TileLayer } from "react-leaflet"
 
 import { Database } from "@/types/supabase"
 
+import { GetMyLocationButton } from "./get-my-location-button"
 import { SpotMarkers } from "./spot-markers"
-import { Button } from "./ui/button"
-
-type SpotInView = {
-  id: string
-  name: string
-  description: string
-  lat: number
-  long: number
-}
 
 type Props = {
   center: L.LatLngExpression
@@ -29,22 +21,9 @@ type Props = {
 export default function Map({ center, isGetMyLocation = false, zoom }: Props) {
   const supabase = createClientComponentClient<Database>()
   const [coord, setCoord] = useState<L.LatLngExpression>(center)
-  const [loading, setLoading] = useState(false)
-
-  const getMyLocation = () => {
-    if (navigator.geolocation) {
-      setLoading(true)
-      navigator.geolocation.getCurrentPosition((position) => {
-        setLoading(false)
-        setCoord([position.coords.latitude, position.coords.longitude])
-      })
-    } else {
-      console.log("Geolocation is not supported by this browser.")
-    }
-  }
 
   return (
-    <div>
+    <div className="text-center">
       <div className="overflow-hidden rounded-sm">
         <MapContainer
           style={{
@@ -64,11 +43,7 @@ export default function Map({ center, isGetMyLocation = false, zoom }: Props) {
         </MapContainer>
       </div>
       {isGetMyLocation && (
-        <div className="mt-4 text-center">
-          <Button onClick={getMyLocation}>
-            {loading ? "Loading..." : "Get my location"}
-          </Button>
-        </div>
+        <GetMyLocationButton onClick={setCoord} className="mt-4" />
       )}
     </div>
   )
