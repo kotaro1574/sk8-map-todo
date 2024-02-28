@@ -74,10 +74,10 @@ export default async function IndexPage() {
             )}
           </div>
           <Separator className="my-4" />
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+          <div className="grid auto-rows-min grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
             {spots.map((spot) => (
               <Link key={spot.id} href={`/s/${spot.id}`}>
-                <Card>
+                <Card className="h-full hover:opacity-70">
                   <CardContent className="p-4">
                     <SpotImage filePath={spot.file_path} />
                     <h2 className="mt-4 text-xl font-bold">{spot.name}</h2>
