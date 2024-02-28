@@ -1,7 +1,4 @@
-import {
-  SupabaseClient,
-  createClientComponentClient,
-} from "@supabase/auth-helpers-nextjs"
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import L from "leaflet"
 
 import "leaflet/dist/leaflet.css"
