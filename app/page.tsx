@@ -13,7 +13,7 @@ import { MapSkeleton } from "@/components/map-skeleton"
 import { SpotImage } from "@/components/spot-image"
 
 const DynamicMap = dynamic(() => import("@/components/map"), {
-  loading: () => <MapSkeleton height="500px">🛹 🛹 🛹</MapSkeleton>,
+  loading: () => <MapSkeleton>🛹 🛹 🛹</MapSkeleton>,
   ssr: false,
 })
 
@@ -56,7 +56,7 @@ export default async function IndexPage() {
 
   return (
     <section>
-      <DynamicMap center={center} isGetMyLocation zoom={13} height={"500px"} />
+      <DynamicMap center={center} isGetMyLocation zoom={13} />
       <div className="container grid max-w-[980px] items-center gap-6 px-4 pb-8 pt-6 md:px-8 md:py-10">
         <div>
           <div className="mt-4 flex items-center justify-between">
@@ -74,10 +74,10 @@ export default async function IndexPage() {
             )}
           </div>
           <Separator className="my-4" />
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+          <div className="grid auto-rows-min grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
             {spots.map((spot) => (
               <Link key={spot.id} href={`/s/${spot.id}`}>
-                <Card>
+                <Card className="h-full hover:opacity-70">
                   <CardContent className="p-4">
                     <SpotImage filePath={spot.file_path} />
                     <h2 className="mt-4 text-xl font-bold">{spot.name}</h2>

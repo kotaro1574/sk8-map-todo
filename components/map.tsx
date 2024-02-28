@@ -1,13 +1,10 @@
 "use client"
 
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import L from "leaflet"
 
 import "leaflet/dist/leaflet.css"
 import { useState } from "react"
 import { MapContainer, TileLayer } from "react-leaflet"
-
-import { Database } from "@/types/supabase"
 
 import { GetMyLocationButton } from "./get-my-location-button"
 import { SpotMarkers } from "./spot-markers"
@@ -25,7 +22,6 @@ export default function Map({
   zoom,
   height = "400px",
 }: Props) {
-  const supabase = createClientComponentClient<Database>()
   const [coord, setCoord] = useState<L.LatLngExpression>(center)
 
   return (
@@ -44,7 +40,7 @@ export default function Map({
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        <SpotMarkers supabase={supabase} />
+        <SpotMarkers />
       </MapContainer>
 
       {isGetMyLocation && (

@@ -1,4 +1,4 @@
-import { SupabaseClient } from "@supabase/auth-helpers-nextjs"
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import L from "leaflet"
 
 import "leaflet/dist/leaflet.css"
@@ -21,11 +21,8 @@ type SpotInView = {
   long: number
 }
 
-export function SpotMarkers({
-  supabase,
-}: {
-  supabase: SupabaseClient<Database>
-}) {
+export function SpotMarkers() {
+  const supabase = createClientComponentClient<Database>()
   const map = useMap()
   const [spotsInView, setSpotsInView] = useState<SpotInView[]>([])
 
@@ -50,7 +47,17 @@ export function SpotMarkers({
       }
     }
 
+    const onMoveEnd = () => {
+      fetchSpotsInView()
+    }
+
+    map.on("moveend", onMoveEnd)
+
     fetchSpotsInView()
+
+    return () => {
+      map.off("moveend", onMoveEnd)
+    }
   }, [map, supabase])
 
   return (
