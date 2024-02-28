@@ -13,7 +13,7 @@ import { MapSkeleton } from "@/components/map-skeleton"
 import { SpotImage } from "@/components/spot-image"
 
 const DynamicMap = dynamic(() => import("@/components/map"), {
-  loading: () => <MapSkeleton height="500px">🛹 🛹 🛹</MapSkeleton>,
+  loading: () => <MapSkeleton>🛹 🛹 🛹</MapSkeleton>,
   ssr: false,
 })
 
@@ -56,7 +56,7 @@ export default async function IndexPage() {
 
   return (
     <section>
-      <DynamicMap center={center} isGetMyLocation zoom={13} height={"500px"} />
+      <DynamicMap center={center} isGetMyLocation zoom={13} />
       <div className="container grid max-w-[980px] items-center gap-6 px-4 pb-8 pt-6 md:px-8 md:py-10">
         <div>
           <div className="mt-4 flex items-center justify-between">
