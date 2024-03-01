@@ -32,9 +32,17 @@ export default async function SpotPage({ params }: { params: { id: string } }) {
     throw spotError
   }
 
-  const center = {
-    lat: spot.lat,
-    lng: spot.long,
+  const {
+    data: spotImages,
+    error: spotImagesError,
+    status: spotImagesStatus,
+  } = await supabase
+    .from("spot_images")
+    .select("file_path")
+    .eq("spot_id", spot.id)
+
+  if (spotImagesError && spotImagesStatus !== 406) {
+    throw spotImagesError
   }
 
   const {
@@ -51,6 +59,11 @@ export default async function SpotPage({ params }: { params: { id: string } }) {
 
   if (userError && userStatus !== 406) {
     throw userError
+  }
+
+  const center = {
+    lat: spot.lat,
+    lng: spot.long,
   }
 
   return (
