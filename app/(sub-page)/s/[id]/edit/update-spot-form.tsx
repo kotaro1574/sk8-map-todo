@@ -118,7 +118,8 @@ export default function UpdateSpotForm({ spot, center }: Props) {
           render={({ field: { onChange, value } }) => (
             <FormItem>
               <FormLabel>spot image</FormLabel>
-              <SpotImageUploader filePath={value} onChange={onChange} />
+              {/*　TODO あとで対応する */}
+              {/* <SpotImageUploader filePath={value} onChange={onChange} /> */}
             </FormItem>
           )}
         />
