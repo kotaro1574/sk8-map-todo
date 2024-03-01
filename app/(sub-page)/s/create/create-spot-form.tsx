@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { Controller, useForm } from "react-hook-form"
-import { z } from "zod"
+import { array, z } from "zod"
 
 import { Database } from "@/types/supabase"
 import { Button } from "@/components/ui/button"
@@ -44,7 +44,7 @@ const formSchema = z.object({
     })
     .nullable(),
   isPublic: z.boolean(),
-  filePath: z.string().nullable(),
+  filePaths: array(z.string()),
 })
 
 export default function CreateSpotForm({
@@ -65,7 +65,7 @@ export default function CreateSpotForm({
       description: "",
       location: null,
       isPublic: false,
-      filePath: null,
+      filePaths: [],
     },
   })
 
@@ -84,7 +84,8 @@ export default function CreateSpotForm({
         description: values.description,
         location: `POINT(${values.location.lng} ${values.location.lat})`,
         is_public: values.isPublic,
-        file_path: values.filePath ?? "",
+        //TODO ↓あとでfile_path消す
+        file_path: "",
       })
 
       if (error) throw error
@@ -107,11 +108,11 @@ export default function CreateSpotForm({
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <Controller
           control={form.control}
-          name="filePath"
+          name="filePaths"
           render={({ field: { onChange, value } }) => (
             <FormItem>
-              <FormLabel>spot image</FormLabel>
-              <SpotImageUploader filePath={value} onChange={onChange} />
+              <FormLabel>spot images</FormLabel>
+              <SpotImageUploader filePaths={value} onChange={onChange} />
             </FormItem>
           )}
         />
