@@ -50,6 +50,35 @@ export type Database = {
           }
         ]
       }
+      spot_images: {
+        Row: {
+          created_at: string
+          file_path: string
+          id: string
+          spot_id: string
+        }
+        Insert: {
+          created_at?: string
+          file_path?: string
+          id?: string
+          spot_id?: string
+        }
+        Update: {
+          created_at?: string
+          file_path?: string
+          id?: string
+          spot_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_spot_images_spot_id_fkey"
+            columns: ["spot_id"]
+            isOneToOne: false
+            referencedRelation: "spots"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       spots: {
         Row: {
           created_at: string
