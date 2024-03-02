@@ -78,17 +78,31 @@ export default function CreateSpotForm({
         return
       }
 
-      const { error } = await supabase.from("spots").insert({
-        name: values.name,
-        trick: values.trick,
-        description: values.description,
-        location: `POINT(${values.location.lng} ${values.location.lat})`,
-        is_public: values.isPublic,
-        //TODO ↓あとでfile_path消す
-        file_path: "",
-      })
+      const { data: spot, error: spotError } = await supabase
+        .from("spots")
+        .insert({
+          name: values.name,
+          trick: values.trick,
+          description: values.description,
+          location: `POINT(${values.location.lng} ${values.location.lat})`,
+          is_public: values.isPublic,
+          //TODO ↓あとでfile_path消す
+          file_path: "",
+        })
+        .select("id")
+        .single()
 
-      if (error) throw error
+      if (spotError) throw spotError
+
+      await Promise.all(
+        values.filePaths.map(async (filePath, i) => {
+          const { error } = await supabase
+            .from("spot_images")
+            .insert({ spot_id: spot.id, file_path: filePath, order: i + 1 })
+
+          if (error) throw error
+        })
+      )
 
       toast({ description: "Spot created!" })
       setLoading(false)

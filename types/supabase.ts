@@ -55,19 +55,25 @@ export type Database = {
           created_at: string
           file_path: string
           id: string
+          order: number
           spot_id: string
+          user_id: string
         }
         Insert: {
           created_at?: string
           file_path?: string
           id?: string
+          order?: number
           spot_id?: string
+          user_id?: string
         }
         Update: {
           created_at?: string
           file_path?: string
           id?: string
+          order?: number
           spot_id?: string
+          user_id?: string
         }
         Relationships: [
           {
@@ -75,6 +81,13 @@ export type Database = {
             columns: ["spot_id"]
             isOneToOne: false
             referencedRelation: "spots"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_spot_images_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
             referencedColumns: ["id"]
           }
         ]
