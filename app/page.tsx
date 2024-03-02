@@ -33,7 +33,15 @@ export default async function IndexPage() {
     status: spotsStatus,
   } = await supabase
     .from("spots")
-    .select("*")
+    .select(
+      `
+    *,
+    spot_images (
+      file_path,
+      order
+    )
+  `
+    )
     .eq("is_public", true)
     .order("created_at", { ascending: false })
 
@@ -79,7 +87,12 @@ export default async function IndexPage() {
               <Link key={spot.id} href={`/s/${spot.id}`}>
                 <Card className="h-full hover:opacity-70">
                   <CardContent className="p-4">
-                    <SpotImage filePath={spot.file_path} />
+                    <SpotImage
+                      filePath={
+                        spot.spot_images.find((image) => image.order === 1)
+                          ?.file_path ?? null
+                      }
+                    />
                     <h2 className="mt-4 text-xl font-bold">{spot.name}</h2>
                   </CardContent>
                 </Card>

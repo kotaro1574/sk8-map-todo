@@ -9,8 +9,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { SpotCompletedButton } from "@/components/spot-completed-button"
 import { SpotImage } from "@/components/spot-image"
 
+type SpotWithImages = Database["public"]["Tables"]["spots"]["Row"] & {
+  spot_images: Pick<
+    Database["public"]["Tables"]["spot_images"]["Row"],
+    "order" | "file_path"
+  >[]
+}
+
 type Props = {
-  spots: Database["public"]["Tables"]["spots"]["Row"][]
+  spots: SpotWithImages[]
   session: Session | null
 }
 
@@ -30,7 +37,12 @@ export function UserSpotsTabs({ spots, session }: Props) {
           .map((spot) => (
             <Card key={spot.id}>
               <CardContent className="p-4">
-                <SpotImage filePath={spot.file_path} />
+                <SpotImage
+                  filePath={
+                    spot.spot_images.find((image) => image.order === 1)
+                      ?.file_path ?? null
+                  }
+                />
                 <Link href={`/s/${spot.id}`} className="hover:underline">
                   <h2 className="mt-4 text-xl font-bold">{spot.name}</h2>
                 </Link>
@@ -56,7 +68,12 @@ export function UserSpotsTabs({ spots, session }: Props) {
           .map((spot) => (
             <Card key={spot.id}>
               <CardContent className="p-4">
-                <SpotImage filePath={spot.file_path} />
+                <SpotImage
+                  filePath={
+                    spot.spot_images.find((image) => image.order === 1)
+                      ?.file_path ?? null
+                  }
+                />
                 <Link href={`/s/${spot.id}`} className="hover:underline">
                   <h2 className="mt-4 text-xl font-bold">{spot.name}</h2>
                 </Link>
