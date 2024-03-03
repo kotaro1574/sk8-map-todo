@@ -21,8 +21,12 @@ export function SpotCompletedButton({
   const { toast } = useToast()
   const supabase = createClientComponentClient<Database>()
 
-  const onMakeOrNomake = async () => {
+  const onMakeOrNomake = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     try {
+      event.preventDefault()
+      event.stopPropagation()
       setIsLoading(true)
 
       const { error } = await supabase
@@ -46,11 +50,19 @@ export function SpotCompletedButton({
   }
 
   return !isCompleted ? (
-    <Button disabled={isLoading} variant={"success"} onClick={onMakeOrNomake}>
+    <Button
+      disabled={isLoading}
+      variant={"success"}
+      onClick={(event) => onMakeOrNomake(event)}
+    >
       {isLoading ? "...loading" : "Make"}
     </Button>
   ) : (
-    <Button disabled={isLoading} variant={"warning"} onClick={onMakeOrNomake}>
+    <Button
+      disabled={isLoading}
+      variant={"warning"}
+      onClick={(event) => onMakeOrNomake(event)}
+    >
       {isLoading ? "...loading" : "No make"}
     </Button>
   )
