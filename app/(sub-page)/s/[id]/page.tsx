@@ -32,9 +32,17 @@ export default async function SpotPage({ params }: { params: { id: string } }) {
     throw spotError
   }
 
-  const center = {
-    lat: spot.lat,
-    lng: spot.long,
+  const {
+    data: spotImages,
+    error: spotImagesError,
+    status: spotImagesStatus,
+  } = await supabase
+    .from("spot_images")
+    .select("file_path")
+    .eq("spot_id", spot.id)
+
+  if (spotImagesError && spotImagesStatus !== 406) {
+    throw spotImagesError
   }
 
   const {
@@ -53,6 +61,11 @@ export default async function SpotPage({ params }: { params: { id: string } }) {
     throw userError
   }
 
+  const center = {
+    lat: spot.lat,
+    lng: spot.long,
+  }
+
   return (
     <section className="grid items-center gap-6">
       <div className="flex items-center justify-between">
@@ -69,7 +82,7 @@ export default async function SpotPage({ params }: { params: { id: string } }) {
         )}
       </div>
       <div className="mx-auto grid w-full max-w-[400px] gap-6">
-        <SpotTabs center={center} filePath={spot.file_path} />
+        <SpotTabs center={center} spotImages={spotImages ?? []} />
 
         <p className="text-lg leading-relaxed tracking-tight md:text-xl">
           {spot.description}

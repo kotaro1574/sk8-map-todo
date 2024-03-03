@@ -12,19 +12,12 @@ import MarkerIcon from "../node_modules/leaflet/dist/images/marker-icon.png"
 import MarkerShadow from "../node_modules/leaflet/dist/images/marker-shadow.png"
 import { SpotImage } from "./spot-image"
 
-type SpotInView = {
-  id: string
-  file_path: string
-  name: string
-  description: string
-  lat: number
-  long: number
-}
-
 export function SpotMarkers() {
   const supabase = createClientComponentClient<Database>()
   const map = useMap()
-  const [spotsInView, setSpotsInView] = useState<SpotInView[]>([])
+  const [spotsInView, setSpotsInView] = useState<
+    Database["public"]["Functions"]["spots_in_view"]["Returns"]
+  >([])
 
   useEffect(() => {
     const fetchSpotsInView = async () => {
@@ -81,7 +74,7 @@ export function SpotMarkers() {
           <Popup>
             <Link href={`/s/${spot.id}`}>
               <div className="w-[150px]">
-                <SpotImage filePath={spot.file_path} />
+                <SpotImage filePath={(spot.images as string[])[0] || null} />
                 <p>{spot.name}</p>
               </div>
             </Link>

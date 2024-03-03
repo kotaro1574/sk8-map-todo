@@ -50,6 +50,48 @@ export type Database = {
           }
         ]
       }
+      spot_images: {
+        Row: {
+          created_at: string
+          file_path: string
+          id: string
+          order: number
+          spot_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          file_path?: string
+          id?: string
+          order?: number
+          spot_id?: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          file_path?: string
+          id?: string
+          order?: number
+          spot_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_spot_images_spot_id_fkey"
+            columns: ["spot_id"]
+            isOneToOne: false
+            referencedRelation: "spots"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_spot_images_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       spots: {
         Row: {
           created_at: string
@@ -164,6 +206,7 @@ export type Database = {
           is_public: boolean
           lat: number
           long: number
+          images: Json
         }[]
       }
     }

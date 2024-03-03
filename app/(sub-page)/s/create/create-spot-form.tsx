@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { Controller, useForm } from "react-hook-form"
-import { z } from "zod"
+import { array, z } from "zod"
 
 import { Database } from "@/types/supabase"
 import { Button } from "@/components/ui/button"
@@ -44,7 +44,7 @@ const formSchema = z.object({
     })
     .nullable(),
   isPublic: z.boolean(),
-  filePath: z.string().nullable(),
+  filePaths: array(z.string()),
 })
 
 export default function CreateSpotForm({
@@ -65,7 +65,7 @@ export default function CreateSpotForm({
       description: "",
       location: null,
       isPublic: false,
-      filePath: null,
+      filePaths: [],
     },
   })
 
@@ -78,16 +78,31 @@ export default function CreateSpotForm({
         return
       }
 
-      const { error } = await supabase.from("spots").insert({
-        name: values.name,
-        trick: values.trick,
-        description: values.description,
-        location: `POINT(${values.location.lng} ${values.location.lat})`,
-        is_public: values.isPublic,
-        file_path: values.filePath ?? "",
-      })
+      const { data: spot, error: spotError } = await supabase
+        .from("spots")
+        .insert({
+          name: values.name,
+          trick: values.trick,
+          description: values.description,
+          location: `POINT(${values.location.lng} ${values.location.lat})`,
+          is_public: values.isPublic,
+          //TODO ↓あとでfile_path消す
+          file_path: "",
+        })
+        .select("id")
+        .single()
 
-      if (error) throw error
+      if (spotError) throw spotError
+
+      await Promise.all(
+        values.filePaths.map(async (filePath, i) => {
+          const { error } = await supabase
+            .from("spot_images")
+            .insert({ spot_id: spot.id, file_path: filePath, order: i + 1 })
+
+          if (error) throw error
+        })
+      )
 
       toast({ description: "Spot created!" })
       setLoading(false)
@@ -107,11 +122,11 @@ export default function CreateSpotForm({
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <Controller
           control={form.control}
-          name="filePath"
+          name="filePaths"
           render={({ field: { onChange, value } }) => (
             <FormItem>
-              <FormLabel>spot image</FormLabel>
-              <SpotImageUploader filePath={value} onChange={onChange} />
+              <FormLabel>spot images</FormLabel>
+              <SpotImageUploader filePaths={value} onChange={onChange} />
             </FormItem>
           )}
         />

@@ -50,7 +50,18 @@ export default async function UserPage({
     data: spots,
     error: spotsError,
     status: spotsStatus,
-  } = await supabase.from("spots").select("*").eq("user_id", user.id)
+  } = await supabase
+    .from("spots")
+    .select(
+      `
+    *,
+    spot_images (
+      file_path,
+      order
+    )
+  `
+    )
+    .eq("user_id", user.id)
 
   if (spotsError && spotsStatus !== 406) {
     throw spotsError

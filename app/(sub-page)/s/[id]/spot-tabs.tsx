@@ -2,9 +2,11 @@
 
 import dynamic from "next/dynamic"
 
+import { Database } from "@/types/supabase"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { MapSkeleton } from "@/components/map-skeleton"
-import { SpotImage } from "@/components/spot-image"
+
+import { SpotCarousel } from "./spot-carousel"
 
 const DynamicMap = dynamic(() => import("@/components/map"), {
   loading: () => <MapSkeleton>📹 📹 📹</MapSkeleton>,
@@ -12,20 +14,23 @@ const DynamicMap = dynamic(() => import("@/components/map"), {
 })
 
 export function SpotTabs({
-  filePath,
+  spotImages,
   center,
 }: {
-  filePath: string
+  spotImages: Pick<
+    Database["public"]["Tables"]["spot_images"]["Row"],
+    "file_path"
+  >[]
   center: { lat: number; lng: number }
 }) {
   return (
-    <Tabs defaultValue={!filePath ? "map" : "image"}>
+    <Tabs defaultValue={!spotImages.length ? "map" : "images"}>
       <TabsList>
-        <TabsTrigger value="image">Image</TabsTrigger>
+        <TabsTrigger value="images">Images</TabsTrigger>
         <TabsTrigger value="map">Map</TabsTrigger>
       </TabsList>
-      <TabsContent value="image">
-        <SpotImage filePath={filePath} />
+      <TabsContent value="images">
+        <SpotCarousel spotImages={spotImages} />
       </TabsContent>
       <TabsContent value="map">
         <DynamicMap center={center} zoom={17} />

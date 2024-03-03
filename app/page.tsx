@@ -6,11 +6,10 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 import { Database } from "@/types/supabase"
 import { siteConfig } from "@/config/site"
 import { buttonVariants } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Icons } from "@/components/icons"
 import { MapSkeleton } from "@/components/map-skeleton"
-import { SpotImage } from "@/components/spot-image"
+import { SpotCard } from "@/components/spot-card"
 
 const DynamicMap = dynamic(() => import("@/components/map"), {
   loading: () => <MapSkeleton>🛹 🛹 🛹</MapSkeleton>,
@@ -33,7 +32,15 @@ export default async function IndexPage() {
     status: spotsStatus,
   } = await supabase
     .from("spots")
-    .select("*")
+    .select(
+      `
+    *,
+    spot_images (
+      file_path,
+      order
+    )
+  `
+    )
     .eq("is_public", true)
     .order("created_at", { ascending: false })
 
@@ -76,13 +83,8 @@ export default async function IndexPage() {
           <Separator className="my-4" />
           <div className="grid auto-rows-min grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
             {spots.map((spot) => (
-              <Link key={spot.id} href={`/s/${spot.id}`}>
-                <Card className="h-full hover:opacity-70">
-                  <CardContent className="p-4">
-                    <SpotImage filePath={spot.file_path} />
-                    <h2 className="mt-4 text-xl font-bold">{spot.name}</h2>
-                  </CardContent>
-                </Card>
+              <Link href={`/s/${spot.id}`} key={spot.id}>
+                <SpotCard spot={spot} session={session} />
               </Link>
             ))}
           </div>
