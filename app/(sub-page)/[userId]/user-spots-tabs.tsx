@@ -34,7 +34,7 @@ export function UserSpotsTabs({ spots, session }: Props) {
           .filter((spot) => !spot.is_completed)
           .map((spot) => (
             <Link href={`/s/${spot.id}`} key={spot.id}>
-              <SpotCard spot={spot} session={session} />
+              <SpotCard spot={spot} session={session} isTrick />
             </Link>
           ))}
       </TabsContent>
@@ -46,7 +46,7 @@ export function UserSpotsTabs({ spots, session }: Props) {
           .filter((spot) => spot.is_completed)
           .map((spot) => (
             <Link href={`/s/${spot.id}`} key={spot.id}>
-              <SpotCard spot={spot} session={session} />
+              <SpotCard spot={spot} session={session} isTrick />
             </Link>
           ))}
       </TabsContent>
