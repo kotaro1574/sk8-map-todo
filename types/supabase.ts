@@ -206,6 +206,7 @@ export type Database = {
           is_public: boolean
           lat: number
           long: number
+          images: Json
         }[]
       }
     }
