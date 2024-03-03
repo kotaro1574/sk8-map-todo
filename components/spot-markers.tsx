@@ -32,7 +32,6 @@ export function SpotMarkers() {
           })
           .eq("is_public", true)
 
-        console.log(data)
         if (data) {
           setSpotsInView(data)
         }
