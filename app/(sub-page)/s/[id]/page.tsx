@@ -69,17 +69,17 @@ export default async function SpotPage({ params }: { params: { id: string } }) {
   return (
     <section className="grid items-center gap-6">
       <div className="flex items-center justify-between">
-        <div className="flex items-end gap-4">
-          <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
-            {spot.name}
-          </h1>
-          <Badge variant={spot.is_completed ? "success" : "warning"}>
-            {spot.is_completed ? "Make" : "No make"}
-          </Badge>
-        </div>
+        <h1 className="max-w-[280px] text-3xl font-extrabold leading-tight tracking-tighter md:max-w-screen-sm md:text-4xl">
+          {spot.name}
+        </h1>
         {session && session.user.id === spot.user_id && (
           <SpotDropdownMenu spotId={params.id} />
         )}
+      </div>
+      <div>
+        <Badge variant={spot.is_public ? "success" : "warning"}>
+          {spot.is_public ? "public spot" : "private spot"}
+        </Badge>
       </div>
       <div className="mx-auto grid w-full max-w-[400px] gap-6">
         <SpotTabs center={center} spotImages={spotImages ?? []} />
@@ -88,21 +88,18 @@ export default async function SpotPage({ params }: { params: { id: string } }) {
           {spot.description}
         </p>
 
-        {session ? (
-          <p className="text-md text-end text-muted-foreground">
-            <Link href={`/${user.id}`} className="mt-2 hover:underline">
-              {user.username}
-            </Link>
-            {` does ${spot.trick} here.`}
-          </p>
-        ) : (
-          <p className="text-md text-end text-muted-foreground">
-            <Link href={`/${user.id}`} className="mt-2 hover:underline">
-              {user.username}
-            </Link>
-            {` created this spot.`}
+        {session && (
+          <p className="text-lg leading-relaxed tracking-tight md:text-xl">
+            trick: {spot.trick}
           </p>
         )}
+
+        <p className="text-md text-end text-muted-foreground">
+          <Link href={`/${user.id}`} className="mt-2 hover:underline">
+            {user.username}
+          </Link>
+          {` created this spot.`}
+        </p>
       </div>
       {session && session.user.id === spot.user_id && (
         <>
